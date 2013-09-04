@@ -75,7 +75,14 @@ public final class ClasspathTest {
                 this.project(dep), this.temp.newFolder(), JavaScopes.TEST
             ),
             Matchers.<File>hasItems(
-                Matchers.hasToString(Matchers.endsWith("/as/directory")),
+                Matchers.hasToString(
+                    Matchers.endsWith(
+                        String.format(
+                            "%sas%<sdirectory",
+                            System.getProperty("file.separator")
+                        )
+                    )
+                ),
                 Matchers.hasToString(Matchers.endsWith("junit-4.10.jar")),
                 Matchers.hasToString(Matchers.endsWith("hamcrest-core-1.1.jar"))
             )
