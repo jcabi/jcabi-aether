@@ -39,6 +39,20 @@
     <version>0.8</version>
     <packaging>jar</packaging>
     <name>jcabi-aether</name>
+    <description>Wrapper of Sonatype Aether</description>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/jcabi/jcabi-aether/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>rultor</system>
+        <url>http://www.rultor.com/s/jcabi</url>
+    </ciManagement>
+    <scm>
+        <connection>scm:git:github.com:jcabi/jcabi-aether.git</connection>
+        <developerConnection>scm:git:github.com:jcabi/jcabi-aether.git</developerConnection>
+        <url>https://github.com/jcabi/jcabi-aether</url>
+    </scm>
     <properties>
         <maven.version>3.0.5</maven.version>
         <sisu.version>2.3.4</sisu.version>
