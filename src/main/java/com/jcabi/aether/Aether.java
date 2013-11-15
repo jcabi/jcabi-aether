@@ -39,6 +39,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.maven.project.DependencyResolutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.sonatype.aether.RepositorySystem;
@@ -52,8 +53,6 @@ import org.sonatype.aether.repository.LocalRepository;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.resolution.DependencyRequest;
-import org.sonatype.aether.resolution.DependencyResolutionException;
-import org.sonatype.aether.resolution.DependencyResult;
 import org.sonatype.aether.util.filter.DependencyFilterUtils;
 
 /**
@@ -178,6 +177,9 @@ public final class Aether {
      * @todo #51 This catch of NPE is a temporary measure. I don't know why
      *  Aether throws NPE in case of non-resolvable artifact. This is the best
      *  I can do at the moment in order to protect clients of the class.
+     * @todo #4 First parameter of DependencyResolutionException should be
+     *  a DependencyResolutionResult, an implementation of this interface has
+     *  to be created and passed to the exception.
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private List<Artifact> fetch(final RepositorySystemSession session,
@@ -196,7 +198,8 @@ public final class Aether {
         // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
             throw new DependencyResolutionException(
-                new DependencyResult(dreq),
+                null,
+                "dependency problem",
                 new IllegalArgumentException(
                     Logger.format(
                         "failed to load '%s' from %[list]s into %s",
