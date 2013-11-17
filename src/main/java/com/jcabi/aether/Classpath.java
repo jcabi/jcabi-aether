@@ -43,18 +43,13 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.sonatype.aether.artifact.Artifact;
+import org.sonatype.aether.resolution.DependencyResolutionException;
+import org.sonatype.aether.util.artifact.DefaultArtifact;
+import org.sonatype.aether.util.artifact.JavaScopes;
 
 /**
  * A classpath of a Maven Project.
@@ -79,7 +74,7 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
  * @see Aether
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
-@EqualsAndHashCode(callSuper = false, of = { "project", "container", "scopes" })
+@EqualsAndHashCode(callSuper = false, of = { "project", "aether", "scopes" })
 @Loggable(
     value = Loggable.DEBUG,
     limit = 1, unit = TimeUnit.MINUTES,
@@ -88,33 +83,14 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 public final class Classpath extends AbstractSet<File> implements Set<File> {
 
     /**
-     * Maven test scope.
-     */
-    public static final String TEST_SCOPE = "test";
-
-    /**
-     * Maven runtime scope.
-     */
-    public static final String RUNTIME_SCOPE = "runtime";
-
-    /**
-     * Maven system scope.
-     */
-    public static final String SYSTEM_SCOPE = "system";
-
-    /**
-     * Maven compile scope.
-     */
-    public static final String COMPILE_SCOPE = "compile";
-
-    /**
-     * Maven provided scope.
-     */
-    public static final String PROVIDED_SCOPE = "provided";
-    /**
      * Maven Project.
      */
     private final transient MavenProject project;
+
+    /**
+     * Aether to work with.
+     */
+    private final transient Aether aether;
 
     /**
      * Artifact scopes to include.
@@ -122,40 +98,27 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
     private final transient Set<String> scopes;
 
     /**
-     * Plexus container.
-     */
-    private final transient PlexusContainer container;
-
-    /**
-     * The current repository/network configuration of Maven.
-     */
-    private final transient MavenSession session;
-
-    /**
      * Public ctor.
-     * @param cntnr Plexus container.
-     * @param sess Maven session.
+     * @param prj The Maven project
+     * @param repo Local repository location (directory path)
      * @param scp The scope to use, e.g. "runtime" or "compile"
      */
-    public Classpath(@NotNull final PlexusContainer cntnr,
-        @NotNull final MavenSession sess,
-        @NotNull final String scp) {
-        this(cntnr, sess, Arrays.asList(scp));
+    public Classpath(@NotNull final MavenProject prj,
+        @NotNull final File repo, @NotNull final String scp) {
+        this(prj, repo, Arrays.asList(scp));
     }
 
     /**
      * Public ctor.
-     * @param cntnr Plexus container.
-     * @param sess Maven session.
+     * @param prj The Maven project
+     * @param repo Local repository location (directory path)
      * @param scps All scopes to include
      */
-    public Classpath(@NotNull final PlexusContainer cntnr,
-        @NotNull final MavenSession sess,
-        @NotNull final Collection<String> scps) {
+    public Classpath(@NotNull final MavenProject prj,
+        @NotNull final File repo, @NotNull final Collection<String> scps) {
         super();
-        this.project = sess.getCurrentProject();
-        this.container = cntnr;
-        this.session = sess;
+        this.project = prj;
+        this.aether = new Aether(prj, repo);
         this.scopes = new HashSet<String>(scps);
     }
 
@@ -172,7 +135,11 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      */
     @Override
     public Iterator<File> iterator() {
-        return this.fetch().iterator();
+        try {
+            return this.fetch().iterator();
+        } catch (DependencyResolutionException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**
@@ -180,42 +147,79 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      */
     @Override
     public int size() {
-        return this.fetch().size();
+        try {
+            return this.fetch().size();
+        } catch (DependencyResolutionException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**
      * Fetch all files found (JAR, ZIP, directories, etc).
      * @return Set of files
+     * @throws DependencyResolutionException If can't resolve
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private Set<File> fetch() {
+    private Set<File> fetch() throws DependencyResolutionException {
         final Set<File> files = new LinkedHashSet<File>(0);
         for (String path : this.elements()) {
             files.add(new File(path));
         }
-        try {
-            final DependencyGraphBuilder builder =
-                (DependencyGraphBuilder) this.container.lookup(
-                    DependencyGraphBuilder.class.getCanonicalName()
-                );
-            final DependencyNode node = builder.buildDependencyGraph(
-                this.project,
-                new ArtifactFilter() {
-                    @Override
-                    public boolean include(
-                        final org.apache.maven.artifact.Artifact artifact) {
-                        return Classpath.this.scopes
-                            .contains(artifact.getScope());
-                    }
-                }
-            );
-            files.addAll(this.dependencies(node, this.scopes));
-        } catch (DependencyGraphBuilderException ex) {
-            throw new IllegalStateException(ex);
-        } catch (ComponentLookupException ex) {
-            throw new IllegalStateException(ex);
+        for (Artifact artifact : this.artifacts()) {
+            files.add(artifact.getFile());
         }
         return files;
+    }
+
+    /**
+     * Get Maven Project elements.
+     * @return Collection of them
+     */
+    private Collection<String> elements() {
+        final Collection<String> elements = new LinkedList<String>();
+        try {
+            if (this.scopes.contains(JavaScopes.TEST)) {
+                elements.addAll(this.project.getTestClasspathElements());
+            }
+            if (this.scopes.contains(JavaScopes.RUNTIME)) {
+                elements.addAll(this.project.getRuntimeClasspathElements());
+            }
+            if (this.scopes.contains(JavaScopes.SYSTEM)) {
+                elements.addAll(this.project.getSystemClasspathElements());
+            }
+            if (this.scopes.contains(JavaScopes.COMPILE)
+                || this.scopes.contains(JavaScopes.PROVIDED)) {
+                elements.addAll(this.project.getCompileClasspathElements());
+            }
+        } catch (DependencyResolutionRequiredException ex) {
+            throw new IllegalStateException("Failed to read classpath", ex);
+        }
+        return elements;
+    }
+
+    /**
+     * Set of unique artifacts, which should be available in classpath.
+     *
+     * <p>This method gets a full list of artifacts of the project,
+     * including their transitive dependencies.
+     *
+     * @return The set of artifacts
+     * @throws DependencyResolutionException If can't resolve some of them
+     */
+    private Set<Artifact> artifacts() throws DependencyResolutionException {
+        final Set<Artifact> artifacts = new LinkedHashSet<Artifact>(0);
+        for (RootArtifact root : this.roots()) {
+            for (Artifact child : root.children()) {
+                if (Classpath.contains(child, artifacts)) {
+                    continue;
+                }
+                if (root.excluded(child)) {
+                    continue;
+                }
+                artifacts.add(child);
+            }
+        }
+        return artifacts;
     }
 
     /**
@@ -245,71 +249,37 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      */
     private RootArtifact root(final Dependency dep) {
         return new RootArtifact(
+            this.aether,
             new DefaultArtifact(
                 dep.getGroupId(),
                 dep.getArtifactId(),
-                dep.getVersion(),
-                dep.getScope(),
-                dep.getType(),
                 dep.getClassifier(),
-                new DefaultArtifactHandler()
+                dep.getType(),
+                dep.getVersion()
             ),
             dep.getExclusions()
         );
     }
 
     /**
-     * Get Maven Project elements.
-     * @return Collection of them
+     * Artifact exists in collection?
+     * @param artifact The artifact
+     * @param artifacts Collection of them
+     * @return TRUE if it is already there
      */
-    private Collection<String> elements() {
-        final Collection<String> elements = new LinkedList<String>();
-        try {
-            if (this.scopes.contains(TEST_SCOPE)) {
-                elements.addAll(this.project.getTestClasspathElements());
+    private static boolean contains(final Artifact artifact,
+        final Collection<Artifact> artifacts) {
+        boolean contains = false;
+        for (Artifact exists : artifacts) {
+            if (artifact.getArtifactId().equals(exists.getArtifactId())
+                && artifact.getGroupId().equals(exists.getGroupId())
+                && artifact.getClassifier().equals(exists.getClassifier())) {
+                contains = true;
+                break;
             }
-            if (this.scopes.contains(RUNTIME_SCOPE)) {
-                elements.addAll(this.project.getRuntimeClasspathElements());
-            }
-            if (this.scopes.contains(SYSTEM_SCOPE)) {
-                elements.addAll(this.project.getSystemClasspathElements());
-            }
-            if (this.scopes.contains(COMPILE_SCOPE)
-                || this.scopes.contains(PROVIDED_SCOPE)) {
-                elements.addAll(this.project.getCompileClasspathElements());
-            }
-        } catch (DependencyResolutionRequiredException ex) {
-            throw new IllegalStateException("Failed to read classpath", ex);
         }
-        return elements;
+        return contains;
     }
 
-    /**
-     * Retrieve dependencies for from given node and scope.
-     * @param node Node to traverse.
-     * @param scps Scopes to use.
-     * @return Collection of dependency files.
-     */
-    private Collection<File> dependencies(final DependencyNode node,
-        final Collection<String> scps) {
-        final org.apache.maven.artifact.Artifact artifact = node.getArtifact();
-        final Collection<File> files = new LinkedList<File>();
-        if ((artifact.getScope() == null)
-            || scps.contains(artifact.getScope())) {
-            if (artifact.getScope() == null) {
-                files.add(artifact.getFile());
-            } else {
-                files.add(
-                    this.session.getLocalRepository().find(artifact).getFile()
-                );
-            }
-            for (DependencyNode child : node.getChildren()) {
-                if (child.getArtifact().compareTo(node.getArtifact()) != 0) {
-                    files.addAll(this.dependencies(child, scps));
-                }
-            }
-        }
-        return files;
-    }
 }
 

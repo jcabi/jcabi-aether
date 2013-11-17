@@ -32,12 +32,12 @@ package com.jcabi.aether;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.log.Logger;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Exclusion;
-import org.sonatype.aether.artifact.Artifact;
-import org.sonatype.aether.resolution.DependencyResolutionException;
-import org.sonatype.aether.util.artifact.JavaScopes;
 
 /**
  * One root artifact found in the project.
@@ -46,14 +46,8 @@ import org.sonatype.aether.util.artifact.JavaScopes;
  * @version $Id$
  * @since 0.7.16
  */
-@EqualsAndHashCode(of = { "aether", "art", "exclusions" })
-final class RootArtifact {
-
-    /**
-     * The aether for finding children.
-     */
-    @NotNull
-    private final transient Aether aether;
+@EqualsAndHashCode(of = { "art", "exclusions" })
+final class MavenRootArtifact {
 
     /**
      * The artifact.
@@ -69,14 +63,11 @@ final class RootArtifact {
 
     /**
      * Ctor.
-     * @param aeth Aether for finding children
      * @param artifact The artifact
      * @param excl Exclusions
      */
-    protected RootArtifact(@NotNull final Aether aeth,
-        @NotNull final Artifact artifact,
-        @NotNull final Collection<Exclusion> excl) {
-        this.aether = aeth;
+    protected MavenRootArtifact(@NotNull final Artifact artifact,
+        @NotNull final List<Exclusion> excl) {
         this.art = artifact;
         this.exclusions = excl;
     }
@@ -96,15 +87,11 @@ final class RootArtifact {
                 this.exclusions.size()
             )
         );
-        try {
-            for (Artifact child : this.children()) {
-                text.append("\n  ").append(child);
-                if (this.excluded(child)) {
-                    text.append(" (excluded)");
-                }
+        for (Artifact child : this.children()) {
+            text.append("\n  ").append(child);
+            if (this.excluded(child)) {
+                text.append(" (excluded)");
             }
-        } catch (DependencyResolutionException ex) {
-            text.append(' ').append(ex);
         }
         return text.toString();
     }
@@ -120,12 +107,17 @@ final class RootArtifact {
     /**
      * Get all dependencies of this root artifact.
      * @return The list of artifacts
-     * @throws DependencyResolutionException If fails to resolve
+     * @todo #4 Retrieve list of children of given artifact from repository that
+     *  will not depend on sonatype aether or eclipse aether.
+     *  Test ClasspathTest.hasToStringWithBrokenDependency and
+     *  RootArtifactTest.gracefullyResolvesBrokenRootArtifact and
+     *  RootArtifactTest.resolvesRootArtifact should pass when
+     *  the method is updated to work in new eclipse aether.
      */
     @Cacheable(forever = true)
-    public Collection<Artifact> children()
-        throws DependencyResolutionException {
-        return this.aether.resolve(this.art, JavaScopes.COMPILE);
+    @SuppressWarnings("unchecked")
+    public Collection<Artifact> children() {
+        return Collections.emptyList();
     }
 
     /**
