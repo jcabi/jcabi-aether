@@ -50,6 +50,9 @@ import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.artifact.JavaScopes;
+import org.sonatype.aether.util.version.GenericVersionScheme;
+import org.sonatype.aether.version.InvalidVersionSpecificationException;
+import org.sonatype.aether.version.VersionScheme;
 
 /**
  * A classpath of a Maven Project.
@@ -238,28 +241,17 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      * @return Newer artifact of the two provided.
      */
     private static Artifact newer(final Artifact child, final Artifact found) {
-        final String sep = "\\.";
-        final String[] cver = child.getVersion().split(sep);
-        final String[] fver = found.getVersion().split(sep);
-        Artifact newer = null;
-        for (int idx = 0; idx < cver.length; ++idx) {
-            if (fver.length > idx) {
-                final int compare = cver[idx].compareTo(fver[idx]);
-                if (compare > 0) {
-                    newer = child;
-                    break;
-                } else if (compare < 0) {
-                    newer = found;
-                    break;
-                }
-            }
-        }
-        if (newer == null) {
-            if (fver.length > cver.length) {
+        final VersionScheme scheme = new GenericVersionScheme();
+        final Artifact newer;
+        try {
+            if (scheme.parseVersion(child.getVersion())
+                .compareTo(scheme.parseVersion(found.getVersion())) < 0) {
                 newer = found;
             } else {
                 newer = child;
             }
+        } catch (InvalidVersionSpecificationException ex) {
+            throw new IllegalStateException(ex);
         }
         return newer;
     }
