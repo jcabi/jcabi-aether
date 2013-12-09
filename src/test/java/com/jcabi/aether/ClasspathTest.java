@@ -149,6 +149,7 @@ public final class ClasspathTest {
     @Test
     public void buildsClasspathWithoutOptionalArtifacts() throws Exception {
         final Dependency dep = new Dependency();
+        // @checkstyle MultipleStringLiterals (2 lines)
         dep.setGroupId("commons-validator");
         dep.setArtifactId("commons-validator");
         dep.setVersion("1.3.1");
@@ -158,12 +159,15 @@ public final class ClasspathTest {
                 this.project(dep), this.temp.newFolder(), JavaScopes.COMPILE
             ),
             Matchers.not(
-                Matchers.hasToString(
-                    Matchers.containsString("oro:oro:jar:2.0.8")
+                Matchers.<File>hasItems(
+                    Matchers.hasToString(
+                        Matchers.endsWith("oro-2.0.8.jar")
+                    )
                 )
             )
         );
     }
+
     /**
      * Classpath can return a string when a dependency is broken.
      * @throws Exception If there is some problem inside
