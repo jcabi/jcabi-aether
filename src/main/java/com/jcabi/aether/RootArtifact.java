@@ -32,10 +32,13 @@ package com.jcabi.aether;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.log.Logger;
 import java.util.Collection;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.maven.model.Exclusion;
 import org.sonatype.aether.artifact.Artifact;
+import org.sonatype.aether.graph.DependencyFilter;
+import org.sonatype.aether.graph.DependencyNode;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.JavaScopes;
 
@@ -125,7 +128,15 @@ final class RootArtifact {
     @Cacheable(forever = true)
     public Collection<Artifact> children()
         throws DependencyResolutionException {
-        return this.aether.resolve(this.art, JavaScopes.COMPILE);
+        return this.aether.resolve(
+            this.art, JavaScopes.COMPILE, new DependencyFilter() {
+                @Override
+                public boolean accept(final DependencyNode node,
+                    final List<DependencyNode> parents) {
+                    return !node.getDependency().isOptional();
+                }
+            }
+        );
     }
 
     /**
