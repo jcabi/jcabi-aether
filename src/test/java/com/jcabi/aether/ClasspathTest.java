@@ -52,6 +52,11 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 public final class ClasspathTest {
 
     /**
+     * Group of test artifact.
+     */
+    private static final String GROUP = "junit";
+
+    /**
      * Temp dir.
      * @checkstyle VisibilityModifier (3 lines)
      */
@@ -64,20 +69,19 @@ public final class ClasspathTest {
      */
     @Test
     public void buildsClasspath() throws Exception {
-        final Dependency dep = new Dependency();
-        final String group = "junit";
-        dep.setGroupId(group);
-        dep.setArtifactId(group);
-        dep.setVersion("4.10");
-        dep.setScope(JavaScopes.TEST);
         MatcherAssert.assertThat(
             new Classpath(
-                this.project(dep), this.temp.newFolder(), JavaScopes.TEST
+                this.project(
+                    this.dependency(
+                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.10"
+                    )
+                ), this.temp.newFolder(), JavaScopes.TEST
             ),
             Matchers.<File>hasItems(
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
+                            // @checkstyle MultipleStringLiterals (2 lines)
                             "%sas%<sdirectory",
                             System.getProperty("file.separator")
                         )
@@ -85,6 +89,55 @@ public final class ClasspathTest {
                 ),
                 Matchers.hasToString(Matchers.endsWith("junit-4.10.jar")),
                 Matchers.hasToString(Matchers.endsWith("hamcrest-core-1.1.jar"))
+            )
+        );
+    }
+
+    /**
+     * Create test dependency.
+     * @param group Dependency group
+     * @param artifact Dependency artifact ID
+     * @param version Dependency Version
+     * @return Created dependency.
+     */
+    private Dependency dependency(final String group, final String artifact,
+        final String version) {
+        final Dependency dep = new Dependency();
+        dep.setGroupId(group);
+        dep.setArtifactId(artifact);
+        dep.setVersion(version);
+        dep.setScope(JavaScopes.TEST);
+        return dep;
+    }
+
+    /**
+     * Classpath should return artifact with highest version number.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void returnsArtifactWithHighestVersionNumber() throws Exception {
+        MatcherAssert.assertThat(
+            new Classpath(
+                this.project(
+                    this.dependency(
+                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.8"
+                    ),
+                    this.dependency(
+                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.8.2"
+                    )
+                ), this.temp.newFolder(), JavaScopes.TEST
+            ),
+            Matchers.<File>hasItems(
+                Matchers.hasToString(
+                    Matchers.endsWith(
+                        String.format(
+                            // @checkstyle MultipleStringLiterals (2 lines)
+                            "%sas%<sdirectory",
+                            System.getProperty("file.separator")
+                        )
+                    )
+                ),
+                Matchers.hasToString(Matchers.endsWith("junit-4.8.2.jar"))
             )
         );
     }
@@ -138,7 +191,7 @@ public final class ClasspathTest {
      * @return Maven project mocked
      * @throws Exception If there is some problem inside
      */
-    private MavenProject project(final Dependency dep) throws Exception {
+    private MavenProject project(final Dependency... dep) throws Exception {
         final MavenProject project = Mockito.mock(MavenProject.class);
         Mockito.doReturn(Arrays.asList("/some/path/as/directory"))
             .when(project).getTestClasspathElements();

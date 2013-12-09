@@ -50,6 +50,9 @@ import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.artifact.JavaScopes;
+import org.sonatype.aether.util.version.GenericVersionScheme;
+import org.sonatype.aether.version.InvalidVersionSpecificationException;
+import org.sonatype.aether.version.VersionScheme;
 
 /**
  * A classpath of a Maven Project.
@@ -80,6 +83,7 @@ import org.sonatype.aether.util.artifact.JavaScopes;
     limit = 1, unit = TimeUnit.MINUTES,
     trim = false
 )
+@SuppressWarnings("PMD.TooManyMethods")
 public final class Classpath extends AbstractSet<File> implements Set<File> {
 
     /**
@@ -211,7 +215,15 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
         for (RootArtifact root : this.roots()) {
             for (Artifact child : root.children()) {
                 if (Classpath.contains(child, artifacts)) {
-                    continue;
+                    final Artifact found = Classpath.find(child, artifacts);
+                    if (found.getVersion().equals(child.getVersion())) {
+                        continue;
+                    }
+                    final Artifact newer = Classpath.newer(child, found);
+                    if (newer == child) {
+                        artifacts.remove(found);
+                        artifacts.add(newer);
+                    }
                 }
                 if (root.excluded(child)) {
                     continue;
@@ -220,6 +232,28 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
             }
         }
         return artifacts;
+    }
+
+    /**
+     * Find which artifact has newer version.
+     * @param child One of the artifacts to compare.
+     * @param found Second artifact to compare.
+     * @return Newer artifact of the two provided.
+     */
+    private static Artifact newer(final Artifact child, final Artifact found) {
+        final VersionScheme scheme = new GenericVersionScheme();
+        final Artifact newer;
+        try {
+            if (scheme.parseVersion(child.getVersion())
+                .compareTo(scheme.parseVersion(found.getVersion())) < 0) {
+                newer = found;
+            } else {
+                newer = child;
+            }
+        } catch (InvalidVersionSpecificationException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return newer;
     }
 
     /**
@@ -281,5 +315,25 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
         return contains;
     }
 
+    /**
+     * Find artifact in collection.
+     * Artifact has to exist in the collection otherwise
+     * IllegalArgumentException will be thrown.
+     *
+     * @param artifact The artifact
+     * @param artifacts Collection of them
+     * @return Found artifact,
+     */
+    private static Artifact find(final Artifact artifact,
+        final Collection<Artifact> artifacts) {
+        for (Artifact exists : artifacts) {
+            if (artifact.getArtifactId().equals(exists.getArtifactId())
+                && artifact.getGroupId().equals(exists.getGroupId())
+                && artifact.getClassifier().equals(exists.getClassifier())) {
+                return exists;
+            }
+        }
+        throw new IllegalArgumentException("Artifact not found");
+    }
 }
 
