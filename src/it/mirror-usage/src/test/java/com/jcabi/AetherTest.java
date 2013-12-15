@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/**
  * Copyright (c) 2012-2013, JCabi.com
  * All rights reserved.
  *
@@ -27,45 +26,54 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-<settings>
-    <profiles>
-        <profile>
-            <id>it-repo</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <repositories>
-                <repository>
-                    <id>local.central</id>
-                    <url>@localRepositoryUrl@</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>local.central</id>
-                    <url>@localRepositoryUrl@</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </pluginRepository>
-            </pluginRepositories>
-        </profile>
-    </profiles>
-    <mirrors>
-        <mirror>
-            <id>uk.maven.org</id>
-            <url>http://uk.maven.org/maven2</url>
-            <mirrorOf>central</mirrorOf>
-        </mirror>
-    </mirrors>
-</settings>
+ */
+package com.jcabi;
+
+import com.jcabi.aether.Aether;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.sonatype.aether.artifact.Artifact;
+import org.sonatype.aether.repository.RemoteRepository;
+import org.sonatype.aether.util.artifact.DefaultArtifact;
+
+/**
+ * Test case for {@link com.jcabi.aether.Aether}.
+ * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @version $Id$
+ */
+public final class AetherTest {
+
+    /**
+     * Temp dir.
+     */
+    @Rule
+    public final transient TemporaryFolder temp = new TemporaryFolder();
+
+    /**
+     * Aether can resolve basic dependency.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void resolvesBasicDependency() throws Exception {
+        final Collection<RemoteRepository> remotes = Arrays.asList(
+            new RemoteRepository(
+                "central",
+                "default",
+                "http://repo1.maven.org/maven2/"
+            )
+        );
+        final File local = this.temp.newFolder();
+        Collection<Artifact> deps = new Aether(remotes, local).resolve(
+            new DefaultArtifact("junit", "junit-dep", "", "jar", "4.10"),
+            "runtime"
+        );
+        MatcherAssert.assertThat(deps, Matchers.not(Matchers.empty()));
+    }
+
+}

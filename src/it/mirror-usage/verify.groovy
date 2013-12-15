@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/**
  * Copyright (c) 2012-2013, JCabi.com
  * All rights reserved.
  *
@@ -27,45 +26,12 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-<settings>
-    <profiles>
-        <profile>
-            <id>it-repo</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <repositories>
-                <repository>
-                    <id>local.central</id>
-                    <url>@localRepositoryUrl@</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>local.central</id>
-                    <url>@localRepositoryUrl@</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </pluginRepository>
-            </pluginRepositories>
-        </profile>
-    </profiles>
-    <mirrors>
-        <mirror>
-            <id>uk.maven.org</id>
-            <url>http://uk.maven.org/maven2</url>
-            <mirrorOf>central</mirrorOf>
-        </mirror>
-    </mirrors>
-</settings>
+ */
+
+def log = new File(basedir, 'build.log')
+assert log.exists()
+// @todo #3 Maven Invoker Plugin doesn't provide an easy way to get maven
+//  settings used in a project, when it does we can refactor Aether and enable
+//  this test.
+// def text = log.getText('UTF-8')
+// assert text.contains('#transferSucceeded(\'GET SUCCEEDED http://uk.maven.org')
