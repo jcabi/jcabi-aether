@@ -41,6 +41,14 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.settings.Mirror;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
+import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuilder;
+import org.apache.maven.settings.building.SettingsBuildingException;
+import org.apache.maven.settings.building.SettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuildingResult;
 import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
@@ -55,6 +63,7 @@ import org.sonatype.aether.resolution.DependencyRequest;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.resolution.DependencyResult;
 import org.sonatype.aether.util.filter.DependencyFilterUtils;
+import org.sonatype.aether.util.repository.DefaultMirrorSelector;
 
 /**
  * Resolver of dependencies for one artifact.
@@ -71,6 +80,7 @@ import org.sonatype.aether.util.filter.DependencyFilterUtils;
  * @version $Id$
  * @since 0.1.6
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
+ * @checkstyle ClassFanOutComplexity (500 lines)
  * @see <a href="http://sonatype.github.com/sonatype-aether/apidocs/overview-tree.html">Aether 1.13.1 JavaDoc</a>
  * @see Classpath
  * @todo #143 This class should be @Immutable, but RemoteRepository is
@@ -80,6 +90,7 @@ import org.sonatype.aether.util.filter.DependencyFilterUtils;
 @ToString
 @EqualsAndHashCode(of = { "remotes", "localRepo" })
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings("PMD.ExcessiveImports")
 public final class Aether {
 
     /**
@@ -117,8 +128,29 @@ public final class Aether {
      */
     public Aether(@NotNull final Collection<RemoteRepository> repos,
         @NotNull final File repo) {
-        this.remotes = repos.toArray(new RemoteRepository[] {});
+        this.remotes = this.mrepos(repos).toArray(new RemoteRepository[] {});
         this.localRepo = repo;
+    }
+
+    /**
+     * Build repositories taking mirrors into consideration.
+     * @param repos Initial list of repositories.
+     * @return List of repositories with mirrored ones.
+     */
+    private Collection<RemoteRepository> mrepos(
+        final Collection<RemoteRepository> repos) {
+        final DefaultMirrorSelector selector = this.mirror(this.settings());
+        final Collection<RemoteRepository> mrepos =
+            new ArrayList<RemoteRepository>();
+        for (RemoteRepository repo : repos) {
+            final RemoteRepository mrepo = selector.getMirror(repo);
+            if (mrepo == null) {
+                mrepos.add(repo);
+            } else {
+                mrepos.add(mrepo);
+            }
+        }
+        return mrepos;
     }
 
     /**
@@ -273,5 +305,65 @@ public final class Aether {
         return session;
     }
 
+    /**
+     * Setup mirrors based on maven settings.
+     * @param settings Settings to use.
+     * @return Mirror selector.
+     */
+    private DefaultMirrorSelector mirror(final Settings settings) {
+        final DefaultMirrorSelector selector =
+            new DefaultMirrorSelector();
+        final List<Mirror> mirrors = settings.getMirrors();
+        Logger.warn(
+            this,
+            "mirrors: %s",
+            mirrors
+        );
+        if (mirrors != null) {
+            for (Mirror mirror : mirrors) {
+                selector.add(
+                    mirror.getId(), mirror.getUrl(), mirror.getLayout(), false,
+                    mirror.getMirrorOf(), mirror.getMirrorOfLayouts()
+                );
+            }
+        }
+        return selector;
+    }
+
+    /**
+     * Provide settings from maven.
+     * @return Maven settings.
+     */
+    private Settings settings() {
+        final SettingsBuilder builder =
+            new DefaultSettingsBuilderFactory().newInstance();
+        final SettingsBuildingRequest request =
+            new DefaultSettingsBuildingRequest();
+        final String user =
+            System.getProperty("org.apache.maven.user-settings");
+        if (user == null) {
+            request.setUserSettingsFile(
+                new File(
+                    new File(
+                        System.getProperty("user.home")).getAbsoluteFile(),
+                    "/.m2/settings.xml"
+                )
+            );
+        } else {
+            request.setUserSettingsFile(new File(user));
+        }
+        final String global =
+            System.getProperty("org.apache.maven.global-settings");
+        if (global != null) {
+            request.setGlobalSettingsFile(new File(global));
+        }
+        final SettingsBuildingResult result;
+        try {
+            result = builder.build(request);
+        } catch (SettingsBuildingException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return result.getEffectiveSettings();
+    }
 }
 
