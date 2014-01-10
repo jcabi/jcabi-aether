@@ -38,10 +38,11 @@
 
 Retrieving Maven Plugin Classpath in Runtime
 
-  In a Maven plugin it is very often necessary to get a full
+  In Maven plugin it is very often necessary to get a full
   classpath (determined by the project dependencies), in relation
   to a certain scope. For example, you want to get a full list
   of all JAR files available for the project in <<<test>>> scope.
+
   {{{./apidocs-${project.version}/com/jcabi/aether/Classpath.html}<<<Classpath>>>}}
   class helps to do this in one line:
 
