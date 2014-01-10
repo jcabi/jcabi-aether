@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='puzzles.xsl'?><puzzles>
+   <puzzle>
+      <ticket>143</ticket>
+      <file>src/main/java/com/jcabi/aether/Aether.java</file>
+      <prefix> * </prefix>
+      <body>This class should be @Immutable, but RemoteRepository is not immutable. Let's create a new class to encapsulate all necessary properties from RemoteRepository.</body>
+      <estimate>0</estimate>
+      <lines>86-88</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>51</ticket>
+      <file>src/main/java/com/jcabi/aether/Aether.java</file>
+      <prefix>     * </prefix>
+      <body>This "filter IF NOT NULL" validation is a workaround, since I don't know what the actual problem is. Looks like sometimes (for some unknown reason) #classpathFilter() returns NULL. When exactly this may happen I have no idea. That's why this workaround. Sometime later we should do a proper testing and reproduce this defect in a test.</body>
+      <estimate>0</estimate>
+      <lines>162-167</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>51</ticket>
+      <file>src/main/java/com/jcabi/aether/Aether.java</file>
+      <prefix>     * </prefix>
+      <body>This catch of NPE is a temporary measure. I don't know why Aether throws NPE in case of non-resolvable artifact. This is the best I can do at the moment in order to protect clients of the class.</body>
+      <estimate>0</estimate>
+      <lines>210-212</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>4</ticket>
+      <file>src/main/java/com/jcabi/aether/MavenRootArtifact.java</file>
+      <prefix>     * </prefix>
+      <body>Retrieve list of children of given artifact from repository that will not depend on sonatype aether or eclipse aether. Test ClasspathTest.hasToStringWithBrokenDependency and RootArtifactTest.gracefullyResolvesBrokenRootArtifact and RootArtifactTest.resolvesRootArtifact should pass when the method is updated to work in new eclipse aether.</body>
+      <estimate>0</estimate>
+      <lines>110-115</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>250</ticket>
+      <file>src/test/java/com/jcabi/aether/AetherTest.java</file>
+      <prefix>     * </prefix>
+      <body>This test doesn't work for some strange reason. I suspect that the problem is with the existence of two constructors in Aether class - aspectj fails to weave them both.</body>
+      <estimate>0</estimate>
+      <lines>171-173</lines>
+      <owner>someone</owner>
+   </puzzle>
+</puzzles>
