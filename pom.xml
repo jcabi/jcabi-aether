@@ -32,8 +32,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.jcabi</groupId>
-        <artifactId>parent</artifactId>
-        <version>0.13.1</version>
+        <artifactId>jcabi</artifactId>
+        <version>1.4</version>
     </parent>
     <artifactId>jcabi-aether</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -64,6 +64,15 @@
         <sisu.version>2.3.4</sisu.version>
     </properties>
     <dependencies>
+        <dependency>
+            <!-- @todo #13 There is a problem with version 5.1.0.Beta1
+             it doesn't process @NotNull annotations in AetherTest.
+             -->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.1.0.Alpha1</version>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aspects</artifactId>
