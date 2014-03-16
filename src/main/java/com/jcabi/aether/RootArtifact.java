@@ -100,7 +100,7 @@ final class RootArtifact {
             )
         );
         try {
-            for (Artifact child : this.children()) {
+            for (final Artifact child : this.children()) {
                 text.append("\n  ").append(child);
                 if (this.excluded(child)) {
                     text.append(" (excluded)");
@@ -129,13 +129,7 @@ final class RootArtifact {
     public Collection<Artifact> children()
         throws DependencyResolutionException {
         return this.aether.resolve(
-            this.art, JavaScopes.COMPILE, new DependencyFilter() {
-                @Override
-                public boolean accept(final DependencyNode node,
-                    final List<DependencyNode> parents) {
-                    return !node.getDependency().isOptional();
-                }
-            }
+            this.art, JavaScopes.COMPILE, new NonOptionalFilter()
         );
     }
 
@@ -146,7 +140,7 @@ final class RootArtifact {
      */
     public boolean excluded(@NotNull final Artifact artifact) {
         boolean excluded = false;
-        for (Exclusion exclusion : this.exclusions) {
+        for (final Exclusion exclusion : this.exclusions) {
             if (exclusion.getArtifactId().equals(artifact.getArtifactId())
                 && exclusion.getGroupId().equals(artifact.getGroupId())) {
                 excluded = true;
@@ -156,4 +150,14 @@ final class RootArtifact {
         return excluded;
     }
 
+    /**
+     * Filter that rejects optional dependencies.
+     */
+    private static class NonOptionalFilter implements DependencyFilter {
+        @Override
+        public boolean accept(final DependencyNode node,
+            final List<DependencyNode> parents) {
+            return !node.getDependency().isOptional();
+        }
+    }
 }

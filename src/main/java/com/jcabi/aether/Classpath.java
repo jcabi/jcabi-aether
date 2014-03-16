@@ -84,7 +84,7 @@ import org.sonatype.aether.version.VersionScheme;
     trim = false
 )
 @SuppressWarnings("PMD.TooManyMethods")
-public final class Classpath extends AbstractSet<File> implements Set<File> {
+public final class Classpath extends AbstractSet<File> {
 
     /**
      * Maven Project.
@@ -166,10 +166,10 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private Set<File> fetch() throws DependencyResolutionException {
         final Set<File> files = new LinkedHashSet<File>(0);
-        for (String path : this.elements()) {
+        for (final String path : this.elements()) {
             files.add(new File(path));
         }
-        for (Artifact artifact : this.artifacts()) {
+        for (final Artifact artifact : this.artifacts()) {
             files.add(artifact.getFile());
         }
         return files;
@@ -212,8 +212,8 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      */
     private Set<Artifact> artifacts() throws DependencyResolutionException {
         final Set<Artifact> artifacts = new LinkedHashSet<Artifact>(0);
-        for (RootArtifact root : this.roots()) {
-            for (Artifact child : root.children()) {
+        for (final RootArtifact root : this.roots()) {
+            for (final Artifact child : root.children()) {
                 if (Classpath.contains(child, artifacts)) {
                     final Artifact found = Classpath.find(child, artifacts);
                     if (found.getVersion().equals(child.getVersion())) {
@@ -267,7 +267,7 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      */
     private Set<RootArtifact> roots() {
         final Set<RootArtifact> roots = new LinkedHashSet<RootArtifact>(0);
-        for (Dependency dep : this.project.getDependencies()) {
+        for (final Dependency dep : this.project.getDependencies()) {
             if (!this.scopes.contains(dep.getScope())) {
                 continue;
             }
@@ -304,7 +304,7 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
     private static boolean contains(final Artifact artifact,
         final Collection<Artifact> artifacts) {
         boolean contains = false;
-        for (Artifact exists : artifacts) {
+        for (final Artifact exists : artifacts) {
             if (artifact.getArtifactId().equals(exists.getArtifactId())
                 && artifact.getGroupId().equals(exists.getGroupId())
                 && artifact.getClassifier().equals(exists.getClassifier())) {
@@ -326,7 +326,7 @@ public final class Classpath extends AbstractSet<File> implements Set<File> {
      */
     private static Artifact find(final Artifact artifact,
         final Collection<Artifact> artifacts) {
-        for (Artifact exists : artifacts) {
+        for (final Artifact exists : artifacts) {
             if (artifact.getArtifactId().equals(exists.getArtifactId())
                 && artifact.getGroupId().equals(exists.getGroupId())
                 && artifact.getClassifier().equals(exists.getClassifier())) {

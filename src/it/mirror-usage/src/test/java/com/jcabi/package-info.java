@@ -27,54 +27,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi;
-
-import com.jcabi.aether.Aether;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.sonatype.aether.artifact.Artifact;
-import org.sonatype.aether.repository.RemoteRepository;
-import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 /**
- * Test case for {@link Aether}.
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * For test.
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
-public final class AetherTest {
-
-    /**
-     * Temp dir.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public final transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Aether can resolve basic dependency.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void resolvesBasicDependency() throws Exception {
-        final Collection<RemoteRepository> remotes = Arrays.asList(
-            new RemoteRepository(
-                "maven-central",
-                "default",
-                "http://repo1.maven.org/maven2/"
-            )
-        );
-        final File local = this.temp.newFolder();
-        final Collection<Artifact> deps = new Aether(remotes, local).resolve(
-            new DefaultArtifact("junit", "junit-dep", "", "jar", "4.10"),
-            "runtime"
-        );
-        MatcherAssert.assertThat(deps, Matchers.not(Matchers.empty()));
-    }
-
-}
+package com.jcabi;

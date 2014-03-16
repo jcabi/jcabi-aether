@@ -66,8 +66,7 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
     limit = 1, unit = TimeUnit.MINUTES,
     trim = false
 )
-public final class MavenClasspath extends AbstractSet<File> implements
-    Set<File> {
+public final class MavenClasspath extends AbstractSet<File> {
 
     /**
      * Maven test scope.
@@ -167,7 +166,7 @@ public final class MavenClasspath extends AbstractSet<File> implements
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private Set<File> fetch() {
         final Set<File> files = new LinkedHashSet<File>(0);
-        for (String path : this.elements()) {
+        for (final String path : this.elements()) {
             files.add(new File(path));
         }
         try {
@@ -201,7 +200,7 @@ public final class MavenClasspath extends AbstractSet<File> implements
     private Set<MavenRootArtifact> roots() {
         final Set<MavenRootArtifact> roots =
             new LinkedHashSet<MavenRootArtifact>(0);
-        for (Dependency dep
+        for (final Dependency dep
             : this.session.getCurrentProject().getDependencies()) {
             if (!this.scopes.contains(dep.getScope())) {
                 continue;
@@ -287,7 +286,7 @@ public final class MavenClasspath extends AbstractSet<File> implements
                     this.session.getLocalRepository().find(artifact).getFile()
                 );
             }
-            for (DependencyNode child : node.getChildren()) {
+            for (final DependencyNode child : node.getChildren()) {
                 if (child.getArtifact().compareTo(node.getArtifact()) != 0) {
                     files.addAll(this.dependencies(child, scps));
                 }
