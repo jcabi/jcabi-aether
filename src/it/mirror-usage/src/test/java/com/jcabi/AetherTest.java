@@ -51,6 +51,7 @@ public final class AetherTest {
 
     /**
      * Temp dir.
+     * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
     public final transient TemporaryFolder temp = new TemporaryFolder();
@@ -69,7 +70,7 @@ public final class AetherTest {
             )
         );
         final File local = this.temp.newFolder();
-        Collection<Artifact> deps = new Aether(remotes, local).resolve(
+        final Collection<Artifact> deps = new Aether(remotes, local).resolve(
             new DefaultArtifact("junit", "junit-dep", "", "jar", "4.10"),
             "runtime"
         );

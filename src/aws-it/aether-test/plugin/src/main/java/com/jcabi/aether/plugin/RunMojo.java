@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi.aether;
+package com.jcabi.aether.plugin;
 
 import com.jcabi.aether.Aether;
 import com.jcabi.log.Logger;
@@ -85,14 +85,14 @@ public class RunMojo extends AbstractMojo {
             this.project,
             this.session.getLocalRepository().getBasedir()
         );
-        for (String coord : this.coordinates) {
+        for (final String coord : this.coordinates) {
             Logger.info(this, "%s:", coord);
             try {
                 final Collection<Artifact> deps = aether.resolve(
                     new DefaultArtifact(coord),
                     JavaScopes.RUNTIME
                 );
-                for (Artifact dep : deps) {
+                for (final Artifact dep : deps) {
                     Logger.info(this, "    %s", dep);
                 }
             } catch (DependencyResolutionException ex) {

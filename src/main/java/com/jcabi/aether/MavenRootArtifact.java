@@ -87,7 +87,7 @@ final class MavenRootArtifact {
                 this.exclusions.size()
             )
         );
-        for (Artifact child : this.children()) {
+        for (final Artifact child : this.children()) {
             text.append("\n  ").append(child);
             if (this.excluded(child)) {
                 text.append(" (excluded)");
@@ -127,7 +127,7 @@ final class MavenRootArtifact {
      */
     public boolean excluded(@NotNull final Artifact artifact) {
         boolean excluded = false;
-        for (Exclusion exclusion : this.exclusions) {
+        for (final Exclusion exclusion : this.exclusions) {
             if (exclusion.getArtifactId().equals(artifact.getArtifactId())
                 && exclusion.getGroupId().equals(artifact.getGroupId())) {
                 excluded = true;

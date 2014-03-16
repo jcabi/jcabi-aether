@@ -88,7 +88,7 @@ import org.sonatype.aether.util.repository.DefaultMirrorSelector;
  *  properties from RemoteRepository.
  */
 @ToString
-@EqualsAndHashCode(of = { "remotes", "localRepo" })
+@EqualsAndHashCode(of = { "remotes", "lrepo" })
 @Loggable(Loggable.DEBUG)
 @SuppressWarnings("PMD.ExcessiveImports")
 public final class Aether {
@@ -99,9 +99,9 @@ public final class Aether {
     private final transient RemoteRepository[] remotes;
 
     /**
-     * Location of local repository.
+     * Location of lrepo repository.
      */
-    private final transient File localRepo;
+    private final transient File lrepo;
 
     /**
      * Repository system.
@@ -111,7 +111,7 @@ public final class Aether {
 
     /**
      * Public ctor, requires information about all remote repositories and one
-     * local.
+     * lrepo.
      * @param prj The Maven project
      * @param repo Local repository location (directory path)
      */
@@ -121,15 +121,16 @@ public final class Aether {
 
     /**
      * Public ctor, requires information about all remote repositories and one
-     * local.
+     * lrepo.
      * @param repos Collection of remote repositories
      * @param repo Local repository location (directory path)
      * @since 0.8
      */
     public Aether(@NotNull final Collection<RemoteRepository> repos,
         @NotNull final File repo) {
-        this.remotes = this.mrepos(repos).toArray(new RemoteRepository[] {});
-        this.localRepo = repo;
+        this.remotes = this.mrepos(repos)
+            .toArray(new RemoteRepository[repos.size()]);
+        this.lrepo = repo;
     }
 
     /**
@@ -142,7 +143,7 @@ public final class Aether {
         final DefaultMirrorSelector selector = this.mirror(this.settings());
         final Collection<RemoteRepository> mrepos =
             new ArrayList<RemoteRepository>();
-        for (RemoteRepository repo : repos) {
+        for (final RemoteRepository repo : repos) {
             final RemoteRepository mrepo = selector.getMirror(repo);
             if (mrepo == null) {
                 mrepos.add(repo);
@@ -217,12 +218,12 @@ public final class Aether {
         final List<Artifact> deps = new LinkedList<Artifact>();
         try {
             Collection<ArtifactResult> results;
-            synchronized (this.localRepo) {
+            synchronized (this.lrepo) {
                 results = this.system
                     .resolveDependencies(session, dreq)
                     .getArtifactResults();
             }
-            for (ArtifactResult res : results) {
+            for (final ArtifactResult res : results) {
                 deps.add(res.getArtifact());
             }
         // @checkstyle IllegalCatch (1 line)
@@ -253,7 +254,7 @@ public final class Aether {
     private CollectRequest request(final Dependency root) {
         final CollectRequest request = new CollectRequest();
         request.setRoot(root);
-        for (RemoteRepository repo : this.remotes) {
+        for (final RemoteRepository repo : this.remotes) {
             if (!repo.getProtocol().matches("https?|file|s3")) {
                 Logger.warn(
                     this,
@@ -276,7 +277,7 @@ public final class Aether {
         final Collection<RemoteRepository> repos) {
         final Collection<String> texts = new ArrayList<String>(repos.size());
         final StringBuilder text = new StringBuilder();
-        for (RemoteRepository repo : repos) {
+        for (final RemoteRepository repo : repos) {
             final Authentication auth = repo.getAuthentication();
             text.setLength(0);
             text.append(repo.toString());
@@ -295,7 +296,7 @@ public final class Aether {
      * @return The session
      */
     private RepositorySystemSession session() {
-        final LocalRepository local = new LocalRepository(this.localRepo);
+        final LocalRepository local = new LocalRepository(this.lrepo);
         final MavenRepositorySystemSession session =
             new MavenRepositorySystemSession();
         session.setLocalRepositoryManager(
@@ -320,7 +321,7 @@ public final class Aether {
             mirrors
         );
         if (mirrors != null) {
-            for (Mirror mirror : mirrors) {
+            for (final Mirror mirror : mirrors) {
                 selector.add(
                     mirror.getId(), mirror.getUrl(), mirror.getLayout(), false,
                     mirror.getMirrorOf(), mirror.getMirrorOfLayouts()
@@ -345,7 +346,8 @@ public final class Aether {
             request.setUserSettingsFile(
                 new File(
                     new File(
-                        System.getProperty("user.home")).getAbsoluteFile(),
+                        System.getProperty("user.home")
+                    ).getAbsoluteFile(),
                     "/.m2/settings.xml"
                 )
             );

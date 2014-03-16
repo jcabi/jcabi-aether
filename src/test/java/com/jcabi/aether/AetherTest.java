@@ -113,7 +113,7 @@ public final class AetherTest {
                 return File.class.cast(file).exists();
             }
         };
-        for (Artifact artifact : artifacts) {
+        for (final Artifact artifact : artifacts) {
             MatcherAssert.assertThat(
                 aether.resolve(artifact, JavaScopes.RUNTIME),
                 Matchers.<Artifact>everyItem(
