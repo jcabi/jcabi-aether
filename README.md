@@ -1,6 +1,7 @@
 <img src="http://img.jcabi.com/logo-square.png" width="64px" height="64px" />
  
 [![Build Status](https://travis-ci.org/jcabi/jcabi-aether.svg?branch=master)](https://travis-ci.org/jcabi/jcabi-aether)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-aether/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-aether)
 
 Aether adapter for Maven plugins
 
@@ -42,16 +43,6 @@ public class MyMojo extends AbstractMojo {
     // Artifact#getFile() method to get its absolute path
   }
 }
-```
-
-You need just this dependency:
-
-```xml
-<dependency>
-  <groupId>com.jcabi</groupId>
-  <artifactId>jcabi-aether</artifactId>
-  <version>0.8</version>
-</dependency>
 ```
 
 ## Questions?
