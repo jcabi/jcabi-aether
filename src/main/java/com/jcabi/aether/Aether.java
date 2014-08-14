@@ -134,27 +134,6 @@ public final class Aether {
     }
 
     /**
-     * Build repositories taking mirrors into consideration.
-     * @param repos Initial list of repositories.
-     * @return List of repositories with mirrored ones.
-     */
-    private Collection<RemoteRepository> mrepos(
-        final Collection<RemoteRepository> repos) {
-        final DefaultMirrorSelector selector = this.mirror(this.settings());
-        final Collection<RemoteRepository> mrepos =
-            new ArrayList<RemoteRepository>();
-        for (final RemoteRepository repo : repos) {
-            final RemoteRepository mrepo = selector.getMirror(repo);
-            if (mrepo == null) {
-                mrepos.add(repo);
-            } else {
-                mrepos.add(mrepo);
-            }
-        }
-        return mrepos;
-    }
-
-    /**
      * List of transitive dependencies of the artifact.
      * @param root The artifact to work with
      * @param scope The scope to work with ("runtime", "test", etc.)
@@ -203,6 +182,27 @@ public final class Aether {
     }
 
     /**
+     * Build repositories taking mirrors into consideration.
+     * @param repos Initial list of repositories.
+     * @return List of repositories with mirrored ones.
+     */
+    private Collection<RemoteRepository> mrepos(
+        final Collection<RemoteRepository> repos) {
+        final DefaultMirrorSelector selector = this.mirror(this.settings());
+        final Collection<RemoteRepository> mrepos =
+            new ArrayList<RemoteRepository>(repos.size());
+        for (final RemoteRepository repo : repos) {
+            final RemoteRepository mrepo = selector.getMirror(repo);
+            if (mrepo == null) {
+                mrepos.add(repo);
+            } else {
+                mrepos.add(mrepo);
+            }
+        }
+        return mrepos;
+    }
+
+    /**
      * Fetch dependencies.
      * @param session The session
      * @param dreq Dependency request
@@ -227,7 +227,7 @@ public final class Aether {
                 deps.add(res.getArtifact());
             }
         // @checkstyle IllegalCatch (1 line)
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new DependencyResolutionException(
                 new DependencyResult(dreq),
                 new IllegalArgumentException(
@@ -362,7 +362,7 @@ public final class Aether {
         final SettingsBuildingResult result;
         try {
             result = builder.build(request);
-        } catch (SettingsBuildingException ex) {
+        } catch (final SettingsBuildingException ex) {
             throw new IllegalStateException(ex);
         }
         return result.getEffectiveSettings();

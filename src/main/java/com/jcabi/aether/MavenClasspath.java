@@ -182,7 +182,7 @@ public final class MavenClasspath extends AbstractSet<File> {
                 }
             );
             files.addAll(this.dependencies(node, this.scopes));
-        } catch (DependencyGraphBuilderException ex) {
+        } catch (final DependencyGraphBuilderException ex) {
             throw new IllegalStateException(ex);
         }
         return files;
@@ -261,7 +261,7 @@ public final class MavenClasspath extends AbstractSet<File> {
                         .getCompileClasspathElements()
                 );
             }
-        } catch (DependencyResolutionRequiredException ex) {
+        } catch (final DependencyResolutionRequiredException ex) {
             throw new IllegalStateException("Failed to read classpath", ex);
         }
         return elements;

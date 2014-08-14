@@ -94,23 +94,6 @@ public final class ClasspathTest {
     }
 
     /**
-     * Create test dependency.
-     * @param group Dependency group
-     * @param artifact Dependency artifact ID
-     * @param version Dependency Version
-     * @return Created dependency.
-     */
-    private Dependency dependency(final String group, final String artifact,
-        final String version) {
-        final Dependency dep = new Dependency();
-        dep.setGroupId(group);
-        dep.setArtifactId(artifact);
-        dep.setVersion(version);
-        dep.setScope(JavaScopes.TEST);
-        return dep;
-    }
-
-    /**
      * Classpath should return artifact with highest version number.
      * @throws Exception If there is some problem inside
      */
@@ -209,6 +192,23 @@ public final class ClasspathTest {
             classpath.canEqual(classpath),
             Matchers.is(true)
         );
+    }
+
+    /**
+     * Create test dependency.
+     * @param group Dependency group
+     * @param artifact Dependency artifact ID
+     * @param version Dependency Version
+     * @return Created dependency.
+     */
+    private Dependency dependency(final String group, final String artifact,
+        final String version) {
+        final Dependency dep = new Dependency();
+        dep.setGroupId(group);
+        dep.setArtifactId(artifact);
+        dep.setVersion(version);
+        dep.setScope(JavaScopes.TEST);
+        return dep;
     }
 
     /**

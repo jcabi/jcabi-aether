@@ -236,7 +236,7 @@ public final class AetherTest {
                 JavaScopes.TEST
             );
             Assert.fail("expection expected here");
-        } catch (DependencyResolutionException ex) {
+        } catch (final DependencyResolutionException ex) {
             MatcherAssert.assertThat(
                 Logger.format("%[exception]s", ex),
                 Matchers.allOf(

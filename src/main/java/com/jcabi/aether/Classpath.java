@@ -141,7 +141,7 @@ public final class Classpath extends AbstractSet<File> {
     public Iterator<File> iterator() {
         try {
             return this.fetch().iterator();
-        } catch (DependencyResolutionException ex) {
+        } catch (final DependencyResolutionException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -153,7 +153,7 @@ public final class Classpath extends AbstractSet<File> {
     public int size() {
         try {
             return this.fetch().size();
-        } catch (DependencyResolutionException ex) {
+        } catch (final DependencyResolutionException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -195,7 +195,7 @@ public final class Classpath extends AbstractSet<File> {
                 || this.scopes.contains(JavaScopes.PROVIDED)) {
                 elements.addAll(this.project.getCompileClasspathElements());
             }
-        } catch (DependencyResolutionRequiredException ex) {
+        } catch (final DependencyResolutionRequiredException ex) {
             throw new IllegalStateException("Failed to read classpath", ex);
         }
         return elements;
@@ -220,7 +220,7 @@ public final class Classpath extends AbstractSet<File> {
                         continue;
                     }
                     final Artifact newer = Classpath.newer(child, found);
-                    if (newer == child) {
+                    if (newer.equals(child)) {
                         artifacts.remove(found);
                         artifacts.add(newer);
                     }
@@ -250,7 +250,7 @@ public final class Classpath extends AbstractSet<File> {
             } else {
                 newer = child;
             }
-        } catch (InvalidVersionSpecificationException ex) {
+        } catch (final InvalidVersionSpecificationException ex) {
             throw new IllegalStateException(ex);
         }
         return newer;

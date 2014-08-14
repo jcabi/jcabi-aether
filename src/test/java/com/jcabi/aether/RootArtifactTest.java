@@ -70,7 +70,7 @@ public final class RootArtifactTest {
             this.aether(),
             // @checkstyle MultipleStringLiterals (1 line)
             new DefaultArtifact("junit", "junit", "", "jar", "4.10"),
-            new ArrayList<Exclusion>()
+            new ArrayList<Exclusion>(0)
         );
         MatcherAssert.assertThat(
             root,
@@ -94,7 +94,7 @@ public final class RootArtifactTest {
         final RootArtifact root = new RootArtifact(
             this.aether(),
             new DefaultArtifact("junit-broken", "junit-absent", "", "", "1.0"),
-            new ArrayList<Exclusion>()
+            new ArrayList<Exclusion>(0)
         );
         MatcherAssert.assertThat(
             root,

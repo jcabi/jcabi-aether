@@ -92,7 +92,7 @@ final class RootArtifact {
         final StringBuilder text = new StringBuilder();
         text.append(
             Logger.format(
-                "%s:%s:%s:",
+                "%s:%s:%s:%d",
                 this.art.getGroupId(),
                 this.art.getArtifactId(),
                 this.art.getVersion(),
@@ -106,7 +106,7 @@ final class RootArtifact {
                     text.append(" (excluded)");
                 }
             }
-        } catch (DependencyResolutionException ex) {
+        } catch (final DependencyResolutionException ex) {
             text.append(' ').append(ex);
         }
         return text.toString();

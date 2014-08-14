@@ -70,7 +70,7 @@ public final class MavenRootArtifactTest {
                 "junit", "junit", "4.10", "", "jar", "",
                 new DefaultArtifactHandler()
             ),
-            new ArrayList<Exclusion>()
+            new ArrayList<Exclusion>(0)
         );
         MatcherAssert.assertThat(
             root,
@@ -96,7 +96,7 @@ public final class MavenRootArtifactTest {
                 "junit-broken", "junit-absent", "1.0", "", "", "",
                 new DefaultArtifactHandler()
             ),
-            new ArrayList<Exclusion>()
+            new ArrayList<Exclusion>(0)
         );
         MatcherAssert.assertThat(
             root,

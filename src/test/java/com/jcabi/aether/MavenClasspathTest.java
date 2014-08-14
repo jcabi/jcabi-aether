@@ -96,32 +96,6 @@ public final class MavenClasspathTest {
     }
 
     /**
-     * Build DependencyGraphBuilder with single dependency node.
-     * @param location Location of node jar.
-     * @return Container.
-     */
-    private DependencyGraphBuilder builder(final String location) {
-        final DependencyGraphBuilder builder = Mockito
-            .mock(DependencyGraphBuilder.class);
-        final DependencyNode node = Mockito.mock(DependencyNode.class);
-        try {
-            Mockito.when(
-                builder.buildDependencyGraph(
-                    Mockito.any(MavenProject.class),
-                    Mockito.any(ArtifactFilter.class)
-                )
-            )
-                .thenReturn(node);
-        } catch (DependencyGraphBuilderException ex) {
-            throw new IllegalStateException(ex);
-        }
-        final Artifact artifact = Mockito.mock(Artifact.class);
-        Mockito.when(artifact.getFile()).thenReturn(new File(location));
-        Mockito.when(node.getArtifact()).thenReturn(artifact);
-        return builder;
-    }
-
-    /**
      * Classpath can return a string when a dependency is broken.
      * @throws Exception If there is some problem inside
      */
@@ -173,6 +147,32 @@ public final class MavenClasspathTest {
             classpath.canEqual(classpath),
             Matchers.is(true)
         );
+    }
+
+    /**
+     * Build DependencyGraphBuilder with single dependency node.
+     * @param location Location of node jar.
+     * @return Container.
+     */
+    private DependencyGraphBuilder builder(final String location) {
+        final DependencyGraphBuilder builder = Mockito
+            .mock(DependencyGraphBuilder.class);
+        final DependencyNode node = Mockito.mock(DependencyNode.class);
+        try {
+            Mockito.when(
+                builder.buildDependencyGraph(
+                    Mockito.any(MavenProject.class),
+                    Mockito.any(ArtifactFilter.class)
+                )
+            )
+                .thenReturn(node);
+        } catch (final DependencyGraphBuilderException ex) {
+            throw new IllegalStateException(ex);
+        }
+        final Artifact artifact = Mockito.mock(Artifact.class);
+        Mockito.when(artifact.getFile()).thenReturn(new File(location));
+        Mockito.when(node.getArtifact()).thenReturn(artifact);
+        return builder;
     }
 
     /**

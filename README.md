@@ -1,4 +1,4 @@
-<img src="http://img.jcabi.com/logo-square.png" width="64px" height="64px" />
+<img src="http://img.jcabi.com/logo-square.svg" width="64px" height="64px" />
 
 [![Made By Teamed.io](http://img.teamed.io/btn.svg)](http://www.teamed.io)
 
@@ -7,7 +7,7 @@
 
 Aether adapter for Maven plugins
 
-More details are here: [www.jcabi.com/jcabi-aether](http://www.jcabi.com/jcabi-aether/index.html)
+More details are here: [aether.jcabi.com](http://aether.jcabi.com/index.html)
 
 [Aether](https://docs.sonatype.org/display/AETHER/Home) is a dependency
 management toolkit for Maven repositories. It is very convenient to use Aether
@@ -50,8 +50,7 @@ public class MyMojo extends AbstractMojo {
 ## Questions?
 
 If you have any questions about the framework, or something doesn't work as expected,
-please [submit an issue here](https://github.com/yegor256/jcabi/issues/new).
-If you want to discuss, please use our [Google Group](https://groups.google.com/forum/#!forum/jcabi).
+please [submit an issue here](https://github.com/jcabi/jcabi-aether/issues/new).
 
 ## How to contribute?
 

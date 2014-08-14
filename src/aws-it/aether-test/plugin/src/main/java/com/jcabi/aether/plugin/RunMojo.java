@@ -79,6 +79,7 @@ public class RunMojo extends AbstractMojo {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final void execute() throws MojoFailureException {
         StaticLoggerBinder.getSingleton().setMavenLog(this.getLog());
         final Aether aether = new Aether(
@@ -95,7 +96,7 @@ public class RunMojo extends AbstractMojo {
                 for (final Artifact dep : deps) {
                     Logger.info(this, "    %s", dep);
                 }
-            } catch (DependencyResolutionException ex) {
+            } catch (final DependencyResolutionException ex) {
                 throw new MojoFailureException(
                     String.format("failed to resolve '%s'", coord),
                     ex
