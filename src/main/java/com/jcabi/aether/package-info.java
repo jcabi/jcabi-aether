@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2013, JCabi.com
+ * Copyright (c) 2012-2014, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,6 @@
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1.6
- * @see <a href="http://www.jcabi.com/jcabi-aether">project website</a>
+ * @see <a href="http://aether.jcabi.com/">project website</a>
  */
 package com.jcabi.aether;
