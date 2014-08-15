@@ -39,6 +39,9 @@
         <module>plugin</module>
         <module>client</module>
     </modules>
+    <properties>
+        <maven.version>3.0.5</maven.version>
+    </properties>
     <distributionManagement>
         <repository>
             <id>aether-test.jcabi.com</id>
