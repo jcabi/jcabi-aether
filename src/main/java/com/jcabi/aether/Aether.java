@@ -29,6 +29,7 @@
  */
 package com.jcabi.aether;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.File;
@@ -83,9 +84,9 @@ import org.sonatype.aether.util.repository.DefaultMirrorSelector;
  * @checkstyle ClassFanOutComplexity (500 lines)
  * @see <a href="http://sonatype.github.com/sonatype-aether/apidocs/overview-tree.html">Aether 1.13.1 JavaDoc</a>
  * @see Classpath
- * @todo #143 This class should be @Immutable, but RemoteRepository is
- *  not immutable. Let's create a new class to encapsulate all necessary
- *  properties from RemoteRepository.
+ * @todo #20 This class should be @Immutable, but Proxy and Authentication
+ *  parameters of Repository are not immutable. Let's create a new classes to
+ *  encapsulate all necessary properties from them.
  */
 @ToString
 @EqualsAndHashCode(of = { "remotes", "lrepo" })
@@ -96,7 +97,8 @@ public final class Aether {
     /**
      * Remote project repositories.
      */
-    private final transient RemoteRepository[] remotes;
+    @Immutable.Array
+    private final transient Repository[] remotes;
 
     /**
      * Location of lrepo repository.
@@ -126,10 +128,14 @@ public final class Aether {
      * @param repo Local repository location (directory path)
      * @since 0.8
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Aether(@NotNull final Collection<RemoteRepository> repos,
         @NotNull final File repo) {
-        this.remotes = this.mrepos(repos)
-            .toArray(new RemoteRepository[repos.size()]);
+        final Collection<Repository> rlist = new LinkedList<Repository>();
+        for (final RemoteRepository remote : this.mrepos(repos)) {
+            rlist.add(new Repository(remote));
+        }
+        this.remotes = rlist.toArray(new Repository[repos.size()]);
         this.lrepo = repo;
     }
 
@@ -254,8 +260,9 @@ public final class Aether {
     private CollectRequest request(final Dependency root) {
         final CollectRequest request = new CollectRequest();
         request.setRoot(root);
-        for (final RemoteRepository repo : this.remotes) {
-            if (!repo.getProtocol().matches("https?|file|s3")) {
+        for (final Repository repo : this.remotes) {
+            final RemoteRepository remote = repo.remote();
+            if (!remote.getProtocol().matches("https?|file|s3")) {
                 Logger.warn(
                     this,
                     "%s ignored (only S3, HTTP/S, and FILE are supported)",
@@ -263,7 +270,7 @@ public final class Aether {
                 );
                 continue;
             }
-            request.addRepository(repo);
+            request.addRepository(remote);
         }
         return request;
     }
