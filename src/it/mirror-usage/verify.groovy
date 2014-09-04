@@ -30,8 +30,5 @@
 
 def log = new File(basedir, 'build.log')
 assert log.exists()
-// @todo #3 Maven Invoker Plugin doesn't provide an easy way to get maven
-//  settings used in a project, when it does we can refactor Aether and enable
-//  this test.
-// def text = log.getText('UTF-8')
-// assert text.contains('#transferSucceeded(\'GET SUCCEEDED http://uk.maven.org')
+def text = log.getText('UTF-8')
+assert text.contains('#transferSucceeded(\'GET SUCCEEDED http://uk.maven.org')

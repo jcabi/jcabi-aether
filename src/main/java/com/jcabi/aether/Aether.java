@@ -33,6 +33,9 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -44,6 +47,8 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.SettingsUtils;
+import org.apache.maven.settings.TrackableBase;
 import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
 import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
 import org.apache.maven.settings.building.SettingsBuilder;
@@ -372,7 +377,35 @@ public final class Aether {
         } catch (final SettingsBuildingException ex) {
             throw new IllegalStateException(ex);
         }
-        return result.getEffectiveSettings();
+        return this.invokers(builder, result);
+    }
+
+    /**
+     * Apply maven invoker settings.
+     * @param builder Settings builder.
+     * @param result User and global settings.
+     * @return User, global and invoker settings.
+     */
+    private Settings invokers(final SettingsBuilder builder,
+        final SettingsBuildingResult result) {
+        Settings main = result.getEffectiveSettings();
+        final Path path = Paths.get(
+            System.getProperty("user.dir"), "..", "interpolated-settings.xml"
+        );
+        if (Files.exists(path)) {
+            final DefaultSettingsBuildingRequest irequest =
+                new DefaultSettingsBuildingRequest();
+            irequest.setUserSettingsFile(path.toAbsolutePath().toFile());
+            try {
+                final Settings isettings = builder.build(irequest)
+                    .getEffectiveSettings();
+                SettingsUtils.merge(isettings, main, TrackableBase.USER_LEVEL);
+                main = isettings;
+            } catch (final SettingsBuildingException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+        return main;
     }
 }
 
