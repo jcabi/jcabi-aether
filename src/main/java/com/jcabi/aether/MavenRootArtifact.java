@@ -32,7 +32,6 @@ package com.jcabi.aether;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.log.Logger;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -62,14 +61,23 @@ final class MavenRootArtifact {
     private final transient Collection<Exclusion> exclusions;
 
     /**
+     * This artifact child artifacts.
+     */
+    @NotNull
+    private final transient Collection<Artifact> chldrn;
+
+    /**
      * Ctor.
      * @param artifact The artifact
      * @param excl Exclusions
+     * @param chld Child artifacts
      */
     protected MavenRootArtifact(@NotNull final Artifact artifact,
-        @NotNull final List<Exclusion> excl) {
+        @NotNull final List<Exclusion> excl,
+        @NotNull final Collection<Artifact> chld) {
         this.art = artifact;
         this.exclusions = excl;
+        this.chldrn = chld;
     }
 
     /**
@@ -80,7 +88,7 @@ final class MavenRootArtifact {
         final StringBuilder text = new StringBuilder();
         text.append(
             Logger.format(
-                "%s:%s:%s:",
+                "%s:%s:%s:%d",
                 this.art.getGroupId(),
                 this.art.getArtifactId(),
                 this.art.getVersion(),
@@ -107,17 +115,11 @@ final class MavenRootArtifact {
     /**
      * Get all dependencies of this root artifact.
      * @return The list of artifacts
-     * @todo #4 Retrieve list of children of given artifact from repository that
-     *  will not depend on sonatype aether or eclipse aether.
-     *  Test ClasspathTest.hasToStringWithBrokenDependency and
-     *  RootArtifactTest.gracefullyResolvesBrokenRootArtifact and
-     *  RootArtifactTest.resolvesRootArtifact should pass when
-     *  the method is updated to work in new eclipse aether.
      */
     @Cacheable(forever = true)
     @SuppressWarnings("unchecked")
     public Collection<Artifact> children() {
-        return Collections.emptyList();
+        return this.chldrn;
     }
 
     /**

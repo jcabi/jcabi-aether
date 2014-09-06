@@ -30,13 +30,13 @@
 package com.jcabi.aether;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.model.Exclusion;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -60,17 +60,17 @@ public final class MavenRootArtifactTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    @Ignore
     @SuppressWarnings("unchecked")
     public void resolvesMavenRootArtifact() throws Exception {
+        final DefaultArtifact artifact = new DefaultArtifact(
+            // @checkstyle MultipleStringLiteralsCheck (1 line)
+            "junit", "junit", "4.10", "", "jar", "",
+            new DefaultArtifactHandler()
+        );
         final MavenRootArtifact root = new MavenRootArtifact(
-            // @checkstyle MultipleStringLiterals (1 line)
-            new DefaultArtifact(
-                // @checkstyle MultipleStringLiteralsCheck (1 line)
-                "junit", "junit", "4.10", "", "jar", "",
-                new DefaultArtifactHandler()
-            ),
-            new ArrayList<Exclusion>(0)
+            artifact,
+            new ArrayList<Exclusion>(0),
+            Collections.<Artifact>singleton(artifact)
         );
         MatcherAssert.assertThat(
             root,
@@ -79,7 +79,7 @@ public final class MavenRootArtifactTest {
         MatcherAssert.assertThat(
             root.children(),
             Matchers.<Artifact>hasItems(
-                Matchers.hasToString("junit:junit:jar:4.10")
+                Matchers.hasToString("junit:junit:jar:4.10:")
             )
         );
     }
@@ -89,19 +89,19 @@ public final class MavenRootArtifactTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    @Ignore
     public void gracefullyResolvesBrokenMavenRootArtifact() throws Exception {
         final MavenRootArtifact root = new MavenRootArtifact(
             new DefaultArtifact(
                 "junit-broken", "junit-absent", "1.0", "", "", "",
                 new DefaultArtifactHandler()
             ),
-            new ArrayList<Exclusion>(0)
+            new ArrayList<Exclusion>(0),
+            new ArrayList<Artifact>(0)
         );
         MatcherAssert.assertThat(
             root,
             Matchers.hasToString(
-                Matchers.containsString("failed to load 'junit-broken:")
+                Matchers.containsString("junit-broken:junit-absent:1.0:0")
             )
         );
     }

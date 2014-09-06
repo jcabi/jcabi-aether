@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
@@ -170,22 +171,30 @@ public final class MavenClasspath extends AbstractSet<File> {
             files.add(new File(path));
         }
         try {
-            final DependencyNode node = this.builder.buildDependencyGraph(
-                this.session.getCurrentProject(),
-                new ArtifactFilter() {
-                    @Override
-                    public boolean include(
-                        final org.apache.maven.artifact.Artifact artifact) {
-                        return MavenClasspath.this.scopes
-                            .contains(artifact.getScope());
-                    }
-                }
-            );
-            files.addAll(this.dependencies(node, this.scopes));
+            files.addAll(this.dependencies(this.graph(), this.scopes));
         } catch (final DependencyGraphBuilderException ex) {
             throw new IllegalStateException(ex);
         }
         return files;
+    }
+
+    /**
+     * Build dependency graph.
+     * @return Root of dependency graph.
+     * @throws DependencyGraphBuilderException In case of error.
+     */
+    private DependencyNode graph() throws DependencyGraphBuilderException {
+        return this.builder.buildDependencyGraph(
+            this.session.getCurrentProject(),
+            new ArtifactFilter() {
+                @Override
+                public boolean include(
+                    final Artifact artifact) {
+                    return MavenClasspath.this.scopes
+                        .contains(artifact.getScope());
+                }
+            }
+        );
     }
 
     /**
@@ -216,18 +225,28 @@ public final class MavenClasspath extends AbstractSet<File> {
      * @return Root artifact
      */
     private MavenRootArtifact root(final Dependency dep) {
-        return new MavenRootArtifact(
-            new DefaultArtifact(
-                dep.getGroupId(),
-                dep.getArtifactId(),
-                dep.getVersion(),
-                dep.getScope(),
-                dep.getType(),
-                dep.getClassifier(),
-                new DefaultArtifactHandler()
-            ),
-            dep.getExclusions()
+        final DefaultArtifact artifact = new DefaultArtifact(
+            dep.getGroupId(),
+            dep.getArtifactId(),
+            dep.getVersion(),
+            dep.getScope(),
+            dep.getType(),
+            dep.getClassifier(),
+            new DefaultArtifactHandler()
         );
+        try {
+            final Collection<Artifact> children = new LinkedList<Artifact>();
+            for (final DependencyNode child : this.graph().getChildren()) {
+                children.add(child.getArtifact());
+            }
+            return new MavenRootArtifact(
+                artifact,
+                dep.getExclusions(),
+                children
+            );
+        } catch (final DependencyGraphBuilderException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**
@@ -275,7 +294,7 @@ public final class MavenClasspath extends AbstractSet<File> {
      */
     private Collection<File> dependencies(final DependencyNode node,
         final Collection<String> scps) {
-        final org.apache.maven.artifact.Artifact artifact = node.getArtifact();
+        final Artifact artifact = node.getArtifact();
         final Collection<File> files = new LinkedList<File>();
         if ((artifact.getScope() == null)
             || scps.contains(artifact.getScope())) {

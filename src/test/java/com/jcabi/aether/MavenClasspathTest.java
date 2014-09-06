@@ -98,6 +98,7 @@ public final class MavenClasspathTest {
     /**
      * Classpath can return a string when a dependency is broken.
      * @throws Exception If there is some problem inside
+     * @todo #28 Add handling of broken dependencies in toString.
      */
     @Test
     @Ignore
