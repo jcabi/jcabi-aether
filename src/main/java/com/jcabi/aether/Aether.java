@@ -215,13 +215,14 @@ public final class Aether {
 
     /**
      * Fetch dependencies.
+     * Catch of NPE is required because sonatype even when it can't resolve
+     * given artifact tries to get its root and execute a method on it,
+     * which is not possible and results in NPE. Moreover sonatype library
+     * is not developed since 2011 so this bug won't be fixed.
      * @param session The session
      * @param dreq Dependency request
      * @return The list of dependencies
      * @throws DependencyResolutionException If can't fetch it
-     * @todo #51 This catch of NPE is a temporary measure. I don't know why
-     *  Aether throws NPE in case of non-resolvable artifact. This is the best
-     *  I can do at the moment in order to protect clients of the class.
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private List<Artifact> fetch(final RepositorySystemSession session,
