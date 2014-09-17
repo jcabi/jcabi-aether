@@ -150,12 +150,6 @@ public final class Aether {
      * @param scope The scope to work with ("runtime", "test", etc.)
      * @return The list of dependencies
      * @throws DependencyResolutionException If can't fetch it
-     * @todo #51 This "filter IF NOT NULL" validation is a workaround,
-     *  since I don't
-     *  know what the actual problem is. Looks like sometimes (for some unknown
-     *  reason) #classpathFilter() returns NULL. When exactly this may happen
-     *  I have no idea. That's why this workaround. Sometime later we should
-     *  do a proper testing and reproduce this defect in a test.
      */
     public List<Artifact> resolve(@NotNull final Artifact root,
         @NotNull final String scope) throws DependencyResolutionException {
