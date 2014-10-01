@@ -108,7 +108,7 @@ public class Main {
 +--
 
   More examples you can find in
-  {{{https://github.com/yegor256/jcabi/blob/master/jcabi-aether/src/test/java/com/jcabi/aether/AetherTest.java}<<<AetherTest>>>}}.
+  {{{https://github.com/jcabi/jcabi-aether/tree/master/src/test/java/com/jcabi/aether/AetherTest.java}<<<AetherTest>>>}}.
 
   {{{./apidocs-${project.version}/com/jcabi/aether/Classpath.html}<<<Classpath>>>}}
   can help you to collect and filter dependencies in a Maven project.
