@@ -140,6 +140,7 @@ public final class MavenClasspath extends AbstractSet<File> {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public String toString() {
         final StringBuilder text = new StringBuilder();
         for (final Dependency dep
@@ -147,7 +148,6 @@ public final class MavenClasspath extends AbstractSet<File> {
             if (this.scopes.contains(dep.getScope())) {
                 try {
                     text.append(this.root(dep));
-                    // @checkstyle IllegalCatch (1 line)
                 } catch (final Exception ex) {
                     text.append(
                         Logger.format(
@@ -161,7 +161,7 @@ public final class MavenClasspath extends AbstractSet<File> {
                         )
                     );
                 }
-                text.append("\n");
+                text.append('\n');
             }
         }
         return text.toString();
@@ -218,28 +218,6 @@ public final class MavenClasspath extends AbstractSet<File> {
                 }
             }
         );
-    }
-
-    /**
-     * Convert dependencies to root artifacts.
-     *
-     * <p>The method is getting a list of artifacts from Maven Project, without
-     * their transitive dependencies (that's why they are called "root"
-     * artifacts).
-     *
-     * @return The set of root artifacts
-     */
-    private Set<MavenRootArtifact> roots() {
-        final Set<MavenRootArtifact> roots =
-            new LinkedHashSet<MavenRootArtifact>(0);
-        for (final Dependency dep
-            : this.session.getCurrentProject().getDependencies()) {
-            if (!this.scopes.contains(dep.getScope())) {
-                continue;
-            }
-            roots.add(this.root(dep));
-        }
-        return roots;
     }
 
     /**
