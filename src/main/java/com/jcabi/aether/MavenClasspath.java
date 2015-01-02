@@ -148,6 +148,7 @@ public final class MavenClasspath extends AbstractSet<File> {
             if (this.scopes.contains(dep.getScope())) {
                 try {
                     text.append(this.root(dep));
+                    // @checkstyle IllegalCatch (1 line)
                 } catch (final Exception ex) {
                     text.append(
                         Logger.format(
