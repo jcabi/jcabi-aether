@@ -41,7 +41,6 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -100,7 +99,6 @@ public final class MavenClasspathTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    @Ignore
     public void hasToStringWithBrokenDependency() throws Exception {
         final Dependency dep = new Dependency();
         dep.setGroupId("junit-broken");
