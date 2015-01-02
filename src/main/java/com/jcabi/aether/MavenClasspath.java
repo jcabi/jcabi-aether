@@ -30,6 +30,7 @@
 package com.jcabi.aether;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.log.Logger;
 import java.io.File;
 import java.util.AbstractSet;
 import java.util.Arrays;
@@ -42,7 +43,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -141,7 +141,30 @@ public final class MavenClasspath extends AbstractSet<File> {
      */
     @Override
     public String toString() {
-        return StringUtils.join(this.roots(), "\n");
+        final StringBuilder text = new StringBuilder();
+        for (final Dependency dep
+            : this.session.getCurrentProject().getDependencies()) {
+            if (this.scopes.contains(dep.getScope())) {
+                try {
+                    text.append(this.root(dep));
+                    // @checkstyle IllegalCatch (1 line)
+                } catch (final Exception ex) {
+                    text.append(
+                        Logger.format(
+                            "failed to load '%s:%s:%s:%s (%s)' %s",
+                            dep.getGroupId(),
+                            dep.getArtifactId(),
+                            dep.getType(),
+                            dep.getVersion(),
+                            dep.getScope(),
+                            ex.getMessage()
+                        )
+                    );
+                }
+                text.append("\n");
+            }
+        }
+        return text.toString();
     }
 
     /**

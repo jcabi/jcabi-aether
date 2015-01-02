@@ -98,7 +98,6 @@ public final class MavenClasspathTest {
     /**
      * Classpath can return a string when a dependency is broken.
      * @throws Exception If there is some problem inside
-     * @todo #28 Add handling of broken dependencies in toString.
      */
     @Test
     @Ignore
@@ -110,6 +109,14 @@ public final class MavenClasspathTest {
         dep.setScope(MavenClasspath.TEST_SCOPE);
         final DependencyGraphBuilder builder =
             Mockito.mock(DependencyGraphBuilder.class);
+        Mockito.doThrow(
+            new DependencyGraphBuilderException("DependencyResolutionException")
+        )
+            .when(builder)
+            .buildDependencyGraph(
+                Mockito.any(MavenProject.class),
+                Mockito.any(ArtifactFilter.class)
+            );
         final MavenSession session = Mockito.mock(MavenSession.class);
         final MavenProject project = this.project(dep);
         Mockito.when(session.getCurrentProject()).thenReturn(project);
@@ -119,7 +126,7 @@ public final class MavenClasspathTest {
         MatcherAssert.assertThat(
             classpath.toString(),
             Matchers.containsString(
-                "failed to load 'junit-broken:junit-absent:jar:1.0 (compile)'"
+                "failed to load 'junit-broken:junit-absent:jar:1.0 (test)'"
             )
         );
     }
