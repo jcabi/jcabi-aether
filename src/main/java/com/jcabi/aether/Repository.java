@@ -39,7 +39,6 @@ import org.sonatype.aether.repository.RepositoryPolicy;
 
 /**
  * Parameter holder for RemoteRepository.
- * 
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
@@ -91,9 +90,7 @@ public final class Repository {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param remote
-	 *            Source of data.
+	 * @param remote Source of data.
 	 */
 	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Repository(final RemoteRepository remote) {
@@ -122,7 +119,6 @@ public final class Repository {
 
 	/**
 	 * Get remote repository.
-	 * 
 	 * @return Remote repository.
 	 */
 	public RemoteRepository remote() {
@@ -150,7 +146,8 @@ public final class Repository {
 		}
 		remote.setProxy(proxy);
 		remote.setRepositoryManager(this.manager);
-		final List<RemoteRepository> remotes = new LinkedList<RemoteRepository>();
+		final List<RemoteRepository> remotes = 
+			new LinkedList<RemoteRepository>();
 		remote.setMirroredRepositories(remotes);
 		for (final Repository repo : this.mirrored) {
 			remotes.add(repo.remote());

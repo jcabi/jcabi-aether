@@ -123,11 +123,8 @@ public final class Aether {
 	/**
 	 * Public ctor, requires information about all remote repositories and one
 	 * lrepo.
-	 * 
-	 * @param prj
-	 *            The Maven project
-	 * @param repo
-	 *            Local repository location (directory path)
+	 * @param prj The Maven project
+	 * @param repo Local repository location (directory path)
 	 */
 	public Aether(@NotNull final MavenProject prj, @NotNull final File repo) {
 		this(prj.getRemoteProjectRepositories(), repo);
@@ -136,11 +133,8 @@ public final class Aether {
 	/**
 	 * Public ctor, requires information about all remote repositories and one
 	 * lrepo.
-	 * 
-	 * @param repos
-	 *            Collection of remote repositories
-	 * @param repo
-	 *            Local repository location (directory path)
+	 * @param repos Collection of remote repositories
+	 * @param repo Local repository location (directory path)
 	 * @since 0.8
 	 */
 	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
@@ -156,38 +150,29 @@ public final class Aether {
 
 	/**
 	 * List of transitive dependencies of the artifact.
-	 * 
-	 * @param root
-	 *            The artifact to work with
-	 * @param scope
-	 *            The scope to work with ("runtime", "test", etc.)
+	 * @param root The artifact to work with
+	 * @param scope The scope to work with ("runtime", "test", etc.)
 	 * @return The list of dependencies
-	 * @throws DependencyResolutionException
-	 *             If can't fetch it
+	 * @throws DependencyResolutionException If can't fetch it
 	 */
 	public List<Artifact> resolve(@NotNull final Artifact root,
 			@NotNull final String scope) throws DependencyResolutionException {
 		final DependencyFilter filter = DependencyFilterUtils
-				.classpathFilter(scope);
+			.classpathFilter(scope);
 		if (filter == null) {
-			throw new IllegalStateException(String.format(
-					"failed to create a filter for '%s'", scope));
+			throw new IllegalStateException(
+				String.format("failed to create a filter for '%s'", scope));
 		}
 		return this.resolve(root, scope, filter);
 	}
 
 	/**
 	 * List of transitive dependencies of the artifact.
-	 * 
-	 * @param root
-	 *            The artifact to work with
-	 * @param scope
-	 *            The scope to work with ("runtime", "test", etc.)
-	 * @param filter
-	 *            The dependency filter to work with
+	 * @param root The artifact to work with
+	 * @param scope The scope to work with ("runtime", "test", etc.)
+	 * @param filter The dependency filter to work with
 	 * @return The list of dependencies
-	 * @throws DependencyResolutionException
-	 *             If can't fetch it
+	 * @throws DependencyResolutionException If can't fetch it
 	 */
 	public List<Artifact> resolve(@NotNull final Artifact root,
 			@NotNull final String scope, @NotNull final DependencyFilter filter)
@@ -202,9 +187,7 @@ public final class Aether {
 
 	/**
 	 * Build repositories taking mirrors into consideration.
-	 * 
-	 * @param repos
-	 *            Initial list of repositories.
+	 * @param repos Initial list of repositories.
 	 * @return List of repositories with mirrored ones.
 	 */
 	private Collection<RemoteRepository> mrepos(
@@ -228,14 +211,10 @@ public final class Aether {
 	 * it can't resolve given artifact tries to get its root and execute a
 	 * method on it, which is not possible and results in NPE. Moreover sonatype
 	 * library is not developed since 2011 so this bug won't be fixed.
-	 * 
-	 * @param session
-	 *            The session
-	 * @param dreq
-	 *            Dependency request
+	 * @param session The session
+	 * @param dreq Dependency request
 	 * @return The list of dependencies
-	 * @throws DependencyResolutionException
-	 *             If can't fetch it
+	 * @throws DependencyResolutionException If can't fetch it
 	 */
 	@SuppressWarnings("PMD.AvoidCatchingGenericException")
 	private List<Artifact> fetch(final RepositorySystemSession session,
@@ -252,23 +231,27 @@ public final class Aether {
 			}
 			// @checkstyle IllegalCatch (1 line)
 		} catch (final Exception ex) {
-			throw new DependencyResolutionException(new DependencyResult(dreq),
-					new IllegalArgumentException(Logger.format(
-							"failed to load '%s' from %[list]s into %s", dreq
-									.getCollectRequest().getRoot(), Aether
-									.reps(dreq.getCollectRequest()
-											.getRepositories()), session
-									.getLocalRepositoryManager()
-									.getRepository().getBasedir()), ex));
+			throw new DependencyResolutionException(
+				new DependencyResult(dreq),
+				new IllegalArgumentException(
+					Logger.format(
+						"failed to load '%s' from %[list]s into %s", 
+						dreq.getCollectRequest().getRoot(), 
+						Aether.reps(dreq.getCollectRequest().getRepositories()),
+						session.getLocalRepositoryManager()
+								.getRepository()
+								.getBasedir()
+					), 
+					ex
+				)
+			);
 		}
 		return deps;
 	}
 
 	/**
 	 * Create collect request.
-	 * 
-	 * @param root
-	 *            The root to start with
+	 * @param root The root to start with
 	 * @return The request
 	 */
 	private CollectRequest request(final Dependency root) {
@@ -289,9 +272,7 @@ public final class Aether {
 
 	/**
 	 * Convert a list of repositories into a list of strings.
-	 * 
-	 * @param repos
-	 *            The list of them
+	 * @param repos The list of them
 	 * @return The list of texts
 	 */
 	private static Collection<String> reps(
@@ -314,7 +295,6 @@ public final class Aether {
 
 	/**
 	 * Create RepositorySystemSession.
-	 * 
 	 * @return The session
 	 */
 	private RepositorySystemSession session() {
@@ -328,9 +308,7 @@ public final class Aether {
 
 	/**
 	 * Setup mirrors based on maven settings.
-	 * 
-	 * @param settings
-	 *            Settings to use.
+	 * @param settings Settings to use.
 	 * @return Mirror selector.
 	 */
 	private DefaultMirrorSelector mirror(final Settings settings) {
@@ -349,7 +327,6 @@ public final class Aether {
 
 	/**
 	 * Provide settings from maven.
-	 * 
 	 * @return Maven settings.
 	 */
 	private Settings settings() {
@@ -381,11 +358,8 @@ public final class Aether {
 
 	/**
 	 * Apply maven invoker settings.
-	 * 
-	 * @param builder
-	 *            Settings builder.
-	 * @param result
-	 *            User and global settings.
+	 * @param builder Settings builder.
+	 * @param result User and global settings.
 	 * @return User, global and invoker settings.
 	 */
 	private Settings invokers(final SettingsBuilder builder,
