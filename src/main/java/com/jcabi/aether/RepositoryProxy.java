@@ -29,90 +29,76 @@
  */
 package com.jcabi.aether;
 
+import org.sonatype.aether.repository.Proxy;
 
 /**
  * Parameter holder for org.sonatype.aether.repository.Authentication.
- * 
+ *
  * @author Mauricio Herrera (oruam85@gmail.com)
  * @version $Id$
  */
 public final class RepositoryProxy {
 
-	/**
-	 * The type of the proxy
-	 */
-	private final String type;
+    /**
+     * The type of the proxy.
+     */
+    private final String type;
 
-	/**
-	 * The host of the proxy
-	 */
-	private final String host;
+    /**
+     * The host of the proxy.
+     */
+    private final String host;
 
-	/**
-	 * The port of the proxy
-	 */
-	private final int port;
+    /**
+     * The port of the proxy.
+     */
+    private final int port;
 
-	/**
-	 * The authentication to use for the proxy connection
-	 */
-	private final RepositoryAuthentication auth;
+    /**
+     * The authentication to use for the proxy connection.
+     */
+    private final RepositoryAuthentication auth;
 
-	/**
-	 * Creates a new proxy with the specified properties.
-	 * 
-	 * @param type
-	 *            The type of the proxy, e.g. "http", may be {@code null}.
-	 * @param host
-	 *            The host of the proxy, may be {@code null}.
-	 * @param port
-	 *            The port of the proxy.
-	 * @param auth
-	 *            The authentication to use for the proxy connection, may be
-	 *            {@code null}.
-	 */
-	public RepositoryProxy(String type, String host, int port,
-			RepositoryAuthentication auth) {
-		this.type = (type != null) ? type : "";
-		this.host = (host != null) ? host : "";
-		this.port = port;
-		this.auth = auth;
-	}
+    /**
+     * Creates a new proxy with the specified properties.
+     * @param proxy The proxy object.
+     */
+    public RepositoryProxy(final Proxy proxy) {
+        this.type = proxy.getType();
+        this.host = proxy.getHost();
+        this.port = proxy.getPort();
+        this.auth = new RepositoryAuthentication(proxy.getAuthentication());
+    }
 
-	/**
-	 * Getter of the type attribute
-	 * 
-	 * @return The type
-	 */
-	public String getType() {
-		return this.type;
-	}
+    /**
+     * Getter of the type attribute.
+     * @return The type.
+     */
+    public String getType() {
+        return this.type;
+    }
 
-	/**
-	 * Getter of the host attribute
-	 * 
-	 * @return The host
-	 */
-	public String getHost() {
-		return this.host;
-	}
+    /**
+     * Getter of the host attribute.
+     * @return The host.
+     */
+    public String getHost() {
+        return this.host;
+    }
 
-	/**
-	 * Getter of the port attribute
-	 * 
-	 * @return The port
-	 */
-	public int getPort() {
-		return this.port;
-	}
+    /**
+     * Getter of the port attribute.
+     * @return The port.
+     */
+    public int getPort() {
+        return this.port;
+    }
 
-	/**
-	 * Getter of the auth attribute
-	 * 
-	 * @return The auth
-	 */
-	public RepositoryAuthentication getAuth() {
-		return this.auth;
-	}
-
+    /**
+     * Getter of the auth attribute.
+     * @return The auth.
+     */
+    public RepositoryAuthentication getAuth() {
+        return this.auth;
+    }
 }

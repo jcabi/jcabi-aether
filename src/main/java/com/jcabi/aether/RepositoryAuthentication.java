@@ -29,81 +29,79 @@
  */
 package com.jcabi.aether;
 
-import org.sonatype.aether.repository.Authentication;
-
 import com.jcabi.aspects.Immutable;
+import org.sonatype.aether.repository.Authentication;
 
 /**
  * Parameter holder for org.sonatype.aether.repository.Authentication.
- * 
+ *
  * @author Mauricio Herrera (oruam85@gmail.com)
  * @version $Id$
  */
 public final class RepositoryAuthentication {
 
-	/**
-	 * The user name
-	 */
-	private final String username;
+    /**
+     * The user name.
+     */
+    private final String username;
 
-	/**
-	 * The password
-	 */
-	@Immutable.Array
-	private final char[] password;
+    /**
+     * The password.
+     */
+    @Immutable.Array
+    private final char[] password;
 
-	/**
-	 * The path to the private key file
-	 */
-	private final String privateKeyFile;
+    /**
+     * The path to the private key file.
+     */
+    private final String privatekeyfile;
 
-	/**
-	 * The passphrase for the private key file
-	 */
-	@Immutable.Array
-	private final char[] passphrase;
+    /**
+     * The passphrase for the private key file.
+     */
+    @Immutable.Array
+    private final char[] passphrase;
 
-	public RepositoryAuthentication(Authentication auth) {
-		this.username = auth.getUsername();
-		this.password = auth.getPassword().toCharArray();
-		this.privateKeyFile = auth.getPrivateKeyFile();
-		this.passphrase = auth.getPassphrase().toCharArray();
-	}
+    /**
+     * Creates a new authentication with the specified properties.
+     * @param auth The authentication object.
+     */
+    public RepositoryAuthentication(final Authentication auth) {
+        this.username = auth.getUsername();
+        this.password = auth.getPassword().toCharArray();
+        this.privatekeyfile = auth.getPrivateKeyFile();
+        this.passphrase = auth.getPassphrase().toCharArray();
+    }
 
-	/**
-	 * Getter of the username attribute
-	 * 
-	 * @return The username
-	 */
-	public String getUsername() {
-		return this.username;
-	}
+    /**
+     * Getter of the username attribute.
+     * @return The username.
+     */
+    public String getUsername() {
+        return this.username;
+    }
 
-	/**
-	 * Getter of the password attribute
-	 * 
-	 * @return The password
-	 */
-	public char[] getPassword() {
-		return this.password;
-	}
+    /**
+     * Getter of the password attribute.
+     * @return The password.
+     */
+    public char[] getPassword() {
+        return this.password;
+    }
 
-	/**
-	 * Getter of the privateKeyFile attribute
-	 * 
-	 * @return The privateKeyFile
-	 */
-	public String getPrivateKeyFile() {
-		return this.privateKeyFile;
-	}
+    /**
+     * Getter of the privateKeyFile attribute.
+     * @return The privateKeyFile.
+     */
+    public String getPrivateKeyFile() {
+        return this.privatekeyfile;
+    }
 
-	/**
-	 * Getter of the passphrase attribute
-	 * 
-	 * @return The passphrase
-	 */
-	public char[] getPassphrase() {
-		return this.passphrase;
-	}
-
+    /**
+     * Getter of the passphrase attribute.
+     * @return The passphrase.
+     */
+    public char[] getPassphrase() {
+        return this.passphrase;
+    }
 }

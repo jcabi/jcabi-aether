@@ -43,71 +43,73 @@ import org.sonatype.aether.repository.RepositoryPolicy;
  * @version $Id$
  */
 public final class Repository {
-	/**
-	 * Id of repository.
-	 */
-	private final transient String identifier;
+    /**
+     * Id of repository.
+     */
+    private final transient String identifier;
 
-	/**
-	 * Repository content type.
-	 */
-	private final transient String type;
+    /**
+     * Repository content type.
+     */
+    private final transient String type;
 
-	/**
-	 * Repository URL.
-	 */
-	private final transient String url;
+    /**
+     * Repository URL.
+     */
+    private final transient String url;
 
-	/**
-	 * Repository release policy.
-	 */
-	private final transient RepositoryPolicy release;
+    /**
+     * Repository release policy.
+     */
+    private final transient RepositoryPolicy release;
 
-	/**
-	 * Repository snapshot policy.
-	 */
-	private final transient RepositoryPolicy snapshot;
+    /**
+     * Repository snapshot policy.
+     */
+    private final transient RepositoryPolicy snapshot;
 
-	/**
-	 * Proxy settings.
-	 */
-	private final transient RepositoryProxy proxy;
+    /**
+     * Proxy settings.
+     */
+    private final transient RepositoryProxy repoproxy;
 
-	/**
-	 * Authentication settings.
-	 */
-	private final transient RepositoryAuthentication authentication;
+    /**
+     * Authentication settings.
+     */
+    private final transient RepositoryAuthentication authentication;
 
-	/**
-	 * Collection of mirrored repositories.
-	 */
-	private final transient Collection<Repository> mirrored;
+    /**
+     * Collection of mirrored repisotories.
+     */
+    private final transient Collection<Repository> mirrored;
 
-	/**
-	 * Is this a repository manager.
-	 */
-	private final transient boolean manager;
+    /**
+     * Is this a repository manager.
+     */
+    private final transient boolean manager;
 
-	/**
-	 * Constructor.
-	 * @param remote Source of data.
-	 */
-	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    /**
+     * Constructor.
+     * @param remote Source of data.
+     */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Repository(final RemoteRepository remote) {
         this.identifier = remote.getId();
         this.type = remote.getContentType();
         this.url = remote.getUrl();
         this.release = remote.getPolicy(false);
         this.snapshot = remote.getPolicy(true);
-        if(remote.getAuthentication()!=null){
-        	this.authentication = new RepositoryAuthentication(remote.getAuthentication());
-        }else{
-        	this.authentication = null;
+        if (remote.getAuthentication() != null) {
+            this.authentication = new RepositoryAuthentication(
+                remote.getAuthentication()
+            );
+        } else {
+            this.authentication = null;
         }
-        if(remote.getProxy()!=null){
-        	this.proxy = new RepositoryProxy(remote.getProxy().getType(), remote.getProxy().getHost(), remote.getProxy().getPort(), this.authentication);
-        }else{
-        	this.proxy = null;
+        if (remote.getProxy() != null) {
+            this.repoproxy = new RepositoryProxy(remote.getProxy());
+        } else {
+            this.repoproxy = null;
         }
         this.manager = remote.isRepositoryManager();
         this.mirrored = new LinkedList<Repository>();
@@ -117,41 +119,44 @@ public final class Repository {
         }
     }
 
-	/**
-	 * Get remote repository.
-	 * @return Remote repository.
-	 */
-	public RemoteRepository remote() {
-		final RemoteRepository remote = new RemoteRepository();
-		remote.setId(this.identifier);
-		remote.setContentType(this.type);
-		remote.setUrl(this.url);
-		remote.setPolicy(false, this.release);
-		remote.setPolicy(true, this.snapshot);
-		
-		Authentication auth =null;
-		if(this.authentication!=null){
-			auth = new Authentication(
-					this.authentication.getUsername(),
-					this.authentication.getPassword(),
-					this.authentication.getPrivateKeyFile(),
-					this.authentication.getPassphrase());
-		}
-		remote.setAuthentication(auth);
-		
-		Proxy proxy = null;
-		if(this.proxy!=null)
-		{	
-			new Proxy(this.proxy.getType(),this.proxy.getHost(), this.proxy.getPort(), auth);
-		}
-		remote.setProxy(proxy);
-		remote.setRepositoryManager(this.manager);
-		final List<RemoteRepository> remotes = 
-			new LinkedList<RemoteRepository>();
-		remote.setMirroredRepositories(remotes);
-		for (final Repository repo : this.mirrored) {
-			remotes.add(repo.remote());
-		}
-		return remote;
-	}
+    /**
+     * Get remote repository.
+     * @return Remote repository.
+     */
+    public RemoteRepository remote() {
+        final RemoteRepository remote = new RemoteRepository();
+        remote.setId(this.identifier);
+        remote.setContentType(this.type);
+        remote.setUrl(this.url);
+        remote.setPolicy(false, this.release);
+        remote.setPolicy(true, this.snapshot);
+        Authentication auth = null;
+        if (this.authentication != null) {
+            auth = new Authentication(
+                this.authentication.getUsername(),
+                this.authentication.getPassword(),
+                this.authentication.getPrivateKeyFile(),
+                this.authentication.getPassphrase()
+            );
+        }
+        remote.setAuthentication(auth);
+        Proxy proxy = null;
+        if (this.repoproxy != null) {
+            proxy = new Proxy(
+                this.repoproxy.getType(),
+                this.repoproxy.getHost(),
+                this.repoproxy.getPort(),
+                auth
+            );
+        }
+        remote.setProxy(proxy);
+        remote.setRepositoryManager(this.manager);
+        final List<RemoteRepository> remotes =
+            new LinkedList<RemoteRepository>();
+        remote.setMirroredRepositories(remotes);
+        for (final Repository repo : this.mirrored) {
+            remotes.add(repo.remote());
+        }
+        return remote;
+    }
 }
