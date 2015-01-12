@@ -79,7 +79,7 @@ public final class Repository {
     private final transient RepositoryAuthentication authentication;
 
     /**
-     * Collection of mirrored repisotories.
+     * Collection of mirrored repositories.
      */
     private final transient Collection<Repository> mirrored;
 
@@ -99,18 +99,18 @@ public final class Repository {
         this.url = remote.getUrl();
         this.release = remote.getPolicy(false);
         this.snapshot = remote.getPolicy(true);
+        RepositoryAuthentication auth = null;
         if (remote.getAuthentication() != null) {
-            this.authentication = new RepositoryAuthentication(
+            auth = new RepositoryAuthentication(
                 remote.getAuthentication()
             );
-        } else {
-            this.authentication = null;
         }
+        this.authentication = auth;
+        RepositoryProxy proxy = null;
         if (remote.getProxy() != null) {
-            this.repoproxy = new RepositoryProxy(remote.getProxy());
-        } else {
-            this.repoproxy = null;
+            proxy = new RepositoryProxy(remote.getProxy());
         }
+        this.repoproxy = proxy;
         this.manager = remote.isRepositoryManager();
         this.mirrored = new LinkedList<Repository>();
         for (final RemoteRepository mremote

@@ -54,7 +54,7 @@ public final class RepositoryAuthentication {
     /**
      * The path to the private key file.
      */
-    private final String privatekeyfile;
+    private final transient String privatekeyfile;
 
     /**
      * The passphrase for the private key file.
@@ -86,7 +86,7 @@ public final class RepositoryAuthentication {
      * @return The password.
      */
     public char[] getPassword() {
-        return this.password;
+        return this.password.clone();
     }
 
     /**
@@ -102,6 +102,6 @@ public final class RepositoryAuthentication {
      * @return The passphrase.
      */
     public char[] getPassphrase() {
-        return this.passphrase;
+        return this.passphrase.clone();
     }
 }
