@@ -29,6 +29,7 @@
  */
 package com.jcabi.aether;
 
+import com.jcabi.aspects.Immutable;
 import org.sonatype.aether.repository.Proxy;
 
 /**
@@ -37,6 +38,7 @@ import org.sonatype.aether.repository.Proxy;
  * @author Mauricio Herrera (oruam85@gmail.com)
  * @version $Id$
  */
+@Immutable
 public final class RepositoryProxy {
 
     /**

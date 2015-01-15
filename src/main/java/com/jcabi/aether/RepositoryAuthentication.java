@@ -38,6 +38,7 @@ import org.sonatype.aether.repository.Authentication;
  * @author Mauricio Herrera (oruam85@gmail.com)
  * @version $Id$
  */
+@Immutable
 public final class RepositoryAuthentication {
 
     /**
