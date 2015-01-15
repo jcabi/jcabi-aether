@@ -41,6 +41,9 @@ import org.sonatype.aether.repository.RepositoryPolicy;
  * Parameter holder for RemoteRepository.
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
+ * @todo #49 This class should be @Immutable, but have a collection of
+ *  Repository that are not immutable. Change this class to @Immutable and
+ *  then change Aether class to @Immutable too.
  */
 public final class Repository {
     /**

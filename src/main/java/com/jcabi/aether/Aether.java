@@ -89,9 +89,6 @@ import org.sonatype.aether.util.repository.DefaultMirrorSelector;
  * @checkstyle ClassFanOutComplexity (500 lines)
  * @see <a href="http://sonatype.github.com/sonatype-aether/apidocs/overview-tree.html">Aether 1.13.1 JavaDoc</a>
  * @see Classpath
- * @todo #20 This class should be @Immutable, but Proxy and Authentication
- *  parameters of Repository are not immutable. Let's create a new classes to
- *  encapsulate all necessary properties from them.
  */
 @ToString
 @EqualsAndHashCode(of = { "remotes", "lrepo" })
