@@ -105,7 +105,7 @@ public final class Aether {
     /**
      * Location of lrepo repository.
      */
-    private final transient File lrepo;
+    private final transient String lrepo;
 
     /**
      * Repository system.
@@ -138,7 +138,7 @@ public final class Aether {
             rlist.add(new Repository(remote));
         }
         this.remotes = rlist.toArray(new Repository[repos.size()]);
-        this.lrepo = repo;
+        this.lrepo = repo.getAbsolutePath();
     }
 
     /**
@@ -400,4 +400,3 @@ public final class Aether {
         return main;
     }
 }
-

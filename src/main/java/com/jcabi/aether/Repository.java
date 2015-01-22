@@ -29,6 +29,7 @@
  */
 package com.jcabi.aether;
 
+import com.jcabi.aspects.Immutable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +43,7 @@ import org.sonatype.aether.repository.RepositoryPolicy;
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
+@Immutable
 public final class Repository {
     /**
      * Id of repository.
@@ -81,7 +83,8 @@ public final class Repository {
     /**
      * Collection of mirrored repositories.
      */
-    private final transient Collection<Repository> mirrored;
+    @Immutable.Array
+    private final transient SimpleRepository[] mirrored;
 
     /**
      * Is this a repository manager.
@@ -112,11 +115,15 @@ public final class Repository {
         }
         this.repoproxy = proxy;
         this.manager = remote.isRepositoryManager();
-        this.mirrored = new LinkedList<Repository>();
+        final Collection<SimpleRepository> mirrorList =
+            new LinkedList<SimpleRepository>();
         for (final RemoteRepository mremote
             : remote.getMirroredRepositories()) {
-            this.mirrored.add(new Repository(mremote));
+            mirrorList.add(new SimpleRepository(mremote));
         }
+        this.mirrored = mirrorList.toArray(
+            new SimpleRepository[mirrorList.size()]
+        );
     }
 
     /**
@@ -154,7 +161,7 @@ public final class Repository {
         final List<RemoteRepository> remotes =
             new LinkedList<RemoteRepository>();
         remote.setMirroredRepositories(remotes);
-        for (final Repository repo : this.mirrored) {
+        for (final SimpleRepository repo : this.mirrored) {
             remotes.add(repo.remote());
         }
         return remote;
