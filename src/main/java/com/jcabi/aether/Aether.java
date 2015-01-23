@@ -94,6 +94,7 @@ import org.sonatype.aether.util.repository.DefaultMirrorSelector;
 @EqualsAndHashCode(of = { "remotes", "lrepo" })
 @Loggable(Loggable.DEBUG)
 @SuppressWarnings("PMD.ExcessiveImports")
+@Immutable
 public final class Aether {
 
     /**
@@ -106,12 +107,6 @@ public final class Aether {
      * Location of lrepo repository.
      */
     private final transient String lrepo;
-
-    /**
-     * Repository system.
-     */
-    private final transient RepositorySystem system =
-        new RepositorySystemBuilder().build();
 
     /**
      * Public ctor, requires information about all remote repositories and one
@@ -174,9 +169,11 @@ public final class Aether {
         final Dependency rdep = new Dependency(root, scope);
         final CollectRequest crq = this.request(rdep);
         final List<Artifact> deps = new LinkedList<Artifact>();
+        final RepositorySystem reposys = new RepositorySystemBuilder().build();
         deps.addAll(
             this.fetch(
-                this.session(),
+                reposys,
+                this.session(reposys),
                 new DependencyRequest(crq, filter)
             )
         );
@@ -210,20 +207,21 @@ public final class Aether {
      * given artifact tries to get its root and execute a method on it,
      * which is not possible and results in NPE. Moreover sonatype library
      * is not developed since 2011 so this bug won't be fixed.
+     * @param system The repository system
      * @param session The session
      * @param dreq Dependency request
      * @return The list of dependencies
      * @throws DependencyResolutionException If can't fetch it
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private List<Artifact> fetch(final RepositorySystemSession session,
-        final DependencyRequest dreq) throws DependencyResolutionException {
+    private List<Artifact> fetch(final RepositorySystem system,
+        final RepositorySystemSession session, final DependencyRequest dreq)
+        throws DependencyResolutionException {
         final List<Artifact> deps = new LinkedList<Artifact>();
         try {
             Collection<ArtifactResult> results;
             synchronized (this.lrepo) {
-                results = this.system
-                    .resolveDependencies(session, dreq)
+                results = system.resolveDependencies(session, dreq)
                     .getArtifactResults();
             }
             for (final ArtifactResult res : results) {
@@ -297,14 +295,15 @@ public final class Aether {
 
     /**
      * Create RepositorySystemSession.
+     * @param system The repository system
      * @return The session
      */
-    private RepositorySystemSession session() {
+    private RepositorySystemSession session(final RepositorySystem system) {
         final LocalRepository local = new LocalRepository(this.lrepo);
         final MavenRepositorySystemSession session =
             new MavenRepositorySystemSession();
         session.setLocalRepositoryManager(
-            this.system.newLocalRepositoryManager(local)
+            system.newLocalRepositoryManager(local)
         );
         session.setTransferListener(new LogTransferListener());
         return session;
