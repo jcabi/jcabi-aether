@@ -32,8 +32,6 @@ package com.jcabi.aether;
 import com.jcabi.aspects.Immutable;
 import java.util.LinkedList;
 import java.util.List;
-import org.sonatype.aether.repository.Authentication;
-import org.sonatype.aether.repository.Proxy;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.repository.RepositoryPolicy;
 
@@ -121,26 +119,12 @@ public final class SimpleRepository {
         remote.setUrl(this.url);
         remote.setPolicy(false, this.release);
         remote.setPolicy(true, this.snapshot);
-        Authentication auth = null;
         if (this.authentication != null) {
-            auth = new Authentication(
-                this.authentication.getUsername(),
-                this.authentication.getPassword(),
-                this.authentication.getPrivateKeyFile(),
-                this.authentication.getPassphrase()
-            );
+            remote.setAuthentication(this.authentication.getAuthentication());
         }
-        remote.setAuthentication(auth);
-        Proxy proxy = null;
         if (this.repoproxy != null) {
-            proxy = new Proxy(
-                this.repoproxy.getType(),
-                this.repoproxy.getHost(),
-                this.repoproxy.getPort(),
-                auth
-            );
+            remote.setProxy(this.repoproxy.getProxy());
         }
-        remote.setProxy(proxy);
         remote.setRepositoryManager(this.manager);
         final List<RemoteRepository> remotes =
             new LinkedList<RemoteRepository>();

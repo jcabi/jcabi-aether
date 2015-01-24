@@ -44,22 +44,22 @@ public final class RepositoryProxy {
     /**
      * The type of the proxy.
      */
-    private final String type;
+    private final transient String type;
 
     /**
      * The host of the proxy.
      */
-    private final String host;
+    private final transient String host;
 
     /**
      * The port of the proxy.
      */
-    private final int port;
+    private final transient int port;
 
     /**
      * The authentication to use for the proxy connection.
      */
-    private final RepositoryAuthentication auth;
+    private final transient RepositoryAuthentication auth;
 
     /**
      * Creates a new proxy with the specified properties.
@@ -73,34 +73,15 @@ public final class RepositoryProxy {
     }
 
     /**
-     * Getter of the type attribute.
-     * @return The type.
+     * Get the Proxy object.
+     * @return The Proxy object.
      */
-    public String getType() {
-        return this.type;
-    }
-
-    /**
-     * Getter of the host attribute.
-     * @return The host.
-     */
-    public String getHost() {
-        return this.host;
-    }
-
-    /**
-     * Getter of the port attribute.
-     * @return The port.
-     */
-    public int getPort() {
-        return this.port;
-    }
-
-    /**
-     * Getter of the auth attribute.
-     * @return The auth.
-     */
-    public RepositoryAuthentication getAuth() {
-        return this.auth;
+    public Proxy getProxy() {
+        return new Proxy(
+            this.type,
+            this.host,
+            this.port,
+            this.auth.getAuthentication()
+        );
     }
 }

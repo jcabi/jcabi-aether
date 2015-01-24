@@ -44,13 +44,13 @@ public final class RepositoryAuthentication {
     /**
      * The user name.
      */
-    private final String username;
+    private final transient String username;
 
     /**
      * The password.
      */
     @Immutable.Array
-    private final char[] password;
+    private final transient char[] password;
 
     /**
      * The path to the private key file.
@@ -61,7 +61,7 @@ public final class RepositoryAuthentication {
      * The passphrase for the private key file.
      */
     @Immutable.Array
-    private final char[] passphrase;
+    private final transient char[] passphrase;
 
     /**
      * Creates a new authentication with the specified properties.
@@ -75,34 +75,15 @@ public final class RepositoryAuthentication {
     }
 
     /**
-     * Getter of the username attribute.
-     * @return The username.
+     * Get the Authentication object.
+     * @return The Authentication object.
      */
-    public String getUsername() {
-        return this.username;
-    }
-
-    /**
-     * Getter of the password attribute.
-     * @return The password.
-     */
-    public char[] getPassword() {
-        return this.password.clone();
-    }
-
-    /**
-     * Getter of the privateKeyFile attribute.
-     * @return The privateKeyFile.
-     */
-    public String getPrivateKeyFile() {
-        return this.privatekeyfile;
-    }
-
-    /**
-     * Getter of the passphrase attribute.
-     * @return The passphrase.
-     */
-    public char[] getPassphrase() {
-        return this.passphrase.clone();
+    public Authentication getAuthentication() {
+        return new Authentication(
+            this.username,
+            this.password,
+            this.privatekeyfile,
+            this.passphrase
+        );
     }
 }

@@ -169,11 +169,11 @@ public final class Aether {
         final Dependency rdep = new Dependency(root, scope);
         final CollectRequest crq = this.request(rdep);
         final List<Artifact> deps = new LinkedList<Artifact>();
-        final RepositorySystem reposys = new RepositorySystemBuilder().build();
+        final RepositorySystem system = new RepositorySystemBuilder().build();
         deps.addAll(
             this.fetch(
-                reposys,
-                this.session(reposys),
+                system,
+                this.session(system),
                 new DependencyRequest(crq, filter)
             )
         );
