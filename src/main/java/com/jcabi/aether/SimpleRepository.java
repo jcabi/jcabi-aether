@@ -30,19 +30,18 @@
 package com.jcabi.aether;
 
 import com.jcabi.aspects.Immutable;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.repository.RepositoryPolicy;
 
 /**
- * Parameter holder for RemoteRepository.
- * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
+ * Parameter holder for a RemoteRepository without mirror.
+ * @author Mauricio Herrera (oruam85@gmail.com)
  * @version $Id$
  */
 @Immutable
-public final class Repository {
+public final class SimpleRepository {
     /**
      * Id of repository.
      */
@@ -79,12 +78,6 @@ public final class Repository {
     private final transient RepositoryAuthentication authentication;
 
     /**
-     * Collection of mirrored repositories.
-     */
-    @Immutable.Array
-    private final transient SimpleRepository[] mirrored;
-
-    /**
      * Is this a repository manager.
      */
     private final transient boolean manager;
@@ -94,7 +87,7 @@ public final class Repository {
      * @param remote Source of data.
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Repository(final RemoteRepository remote) {
+    public SimpleRepository(final RemoteRepository remote) {
         this.identifier = remote.getId();
         this.type = remote.getContentType();
         this.url = remote.getUrl();
@@ -113,15 +106,6 @@ public final class Repository {
         }
         this.repoproxy = proxy;
         this.manager = remote.isRepositoryManager();
-        final Collection<SimpleRepository> list =
-            new LinkedList<SimpleRepository>();
-        for (final RemoteRepository mremote
-            : remote.getMirroredRepositories()) {
-            list.add(new SimpleRepository(mremote));
-        }
-        this.mirrored = list.toArray(
-            new SimpleRepository[list.size()]
-        );
     }
 
     /**
@@ -145,9 +129,6 @@ public final class Repository {
         final List<RemoteRepository> remotes =
             new LinkedList<RemoteRepository>();
         remote.setMirroredRepositories(remotes);
-        for (final SimpleRepository repo : this.mirrored) {
-            remotes.add(repo.remote());
-        }
         return remote;
     }
 }
