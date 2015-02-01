@@ -223,6 +223,9 @@ public final class Classpath extends AbstractSet<File> {
                     if (newer.equals(child)) {
                         artifacts.remove(found);
                         artifacts.add(newer);
+                    } else {
+                        artifacts.remove(child);
+                        artifacts.add(newer);
                     }
                 }
                 if (root.excluded(child)) {
