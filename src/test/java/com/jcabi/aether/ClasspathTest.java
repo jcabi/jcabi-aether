@@ -103,6 +103,9 @@ public final class ClasspathTest {
             new Classpath(
                 this.project(
                     this.dependency(
+                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.8.6"
+                    ),
+                    this.dependency(
                         ClasspathTest.GROUP, ClasspathTest.GROUP, "4.8"
                     ),
                     this.dependency(
@@ -120,7 +123,7 @@ public final class ClasspathTest {
                         )
                     )
                 ),
-                Matchers.hasToString(Matchers.endsWith("junit-4.8.2.jar"))
+                Matchers.hasToString(Matchers.endsWith("junit-4.8.6.jar"))
             )
         );
     }
