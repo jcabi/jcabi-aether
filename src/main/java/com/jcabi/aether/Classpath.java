@@ -222,16 +222,13 @@ public final class Classpath extends AbstractSet<File> {
                     final Artifact newer = Classpath.newer(child, found);
                     if (newer.equals(child)) {
                         artifacts.remove(found);
-                        artifacts.add(newer);
                     } else {
                         artifacts.remove(child);
-                        artifacts.add(newer);
                     }
+                    artifacts.add(newer);
+                } else if (!root.excluded(child)) {
+                    artifacts.add(child);
                 }
-                if (root.excluded(child)) {
-                    continue;
-                }
-                artifacts.add(child);
             }
         }
         return artifacts;

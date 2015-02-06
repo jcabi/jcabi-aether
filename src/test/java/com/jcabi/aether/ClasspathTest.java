@@ -32,6 +32,8 @@ package com.jcabi.aether;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
@@ -113,22 +115,32 @@ public final class ClasspathTest {
                     )
                 ), this.temp.newFolder(), JavaScopes.TEST
             ),
-            Matchers.<File>hasItems(
-                Matchers.hasToString(
-                    Matchers.endsWith(
-                        String.format(
-                            // @checkstyle MultipleStringLiterals (2 lines)
-                            "%sas%<sdirectory",
-                            System.getProperty("file.separator")
+            Matchers.allOf(
+                Matchers.<File>hasItems(
+                    Matchers.hasToString(
+                        Matchers.endsWith(
+                            String.format(
+                                // @checkstyle MultipleStringLiterals (2 lines)
+                                "%sas%<sdirectory",
+                                System.getProperty("file.separator")
+                            )
+                        )
+                    ),
+                    Matchers.hasToString(Matchers.endsWith("junit-4.11.jar"))
+                ),
+                Matchers.not(
+                    Matchers.<File>hasItems(
+                        Matchers.hasToString(
+                            Matchers.endsWith("junit-4.8.jar")
                         )
                     )
                 ),
-                Matchers.hasToString(Matchers.endsWith("junit-4.11.jar")),
                 Matchers.not(
-                    Matchers.hasToString(Matchers.endsWith("junit-4.8.jar"))
-                ),
-                Matchers.not(
-                    Matchers.hasToString(Matchers.endsWith("junit-4.8.2.jar"))
+                    Matchers.<File>hasItems(
+                        Matchers.hasToString(
+                            Matchers.endsWith("junit-4.8.2.jar")
+                        )
+                    )
                 )
             )
         );
