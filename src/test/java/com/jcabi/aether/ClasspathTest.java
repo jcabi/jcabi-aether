@@ -32,8 +32,6 @@ package com.jcabi.aether;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
