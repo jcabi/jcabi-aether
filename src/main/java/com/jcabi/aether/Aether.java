@@ -63,6 +63,7 @@ import org.sonatype.aether.graph.Dependency;
 import org.sonatype.aether.graph.DependencyFilter;
 import org.sonatype.aether.repository.Authentication;
 import org.sonatype.aether.repository.LocalRepository;
+import org.sonatype.aether.repository.Proxy;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.resolution.DependencyRequest;
@@ -70,6 +71,7 @@ import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.resolution.DependencyResult;
 import org.sonatype.aether.util.filter.DependencyFilterUtils;
 import org.sonatype.aether.util.repository.DefaultMirrorSelector;
+import org.sonatype.aether.util.repository.DefaultProxySelector;
 
 /**
  * Resolver of dependencies for one artifact.
@@ -188,15 +190,24 @@ public final class Aether {
     private Collection<RemoteRepository> mrepos(
         final Collection<RemoteRepository> repos) {
         final DefaultMirrorSelector selector = this.mirror(this.settings());
+        /** @todo add correct mapping **/
+        org.apache.maven.settings.Proxy activeProxy = this.settings().getActiveProxy();
+        final DefaultProxySelector proxySelector = new DefaultProxySelector().add(
+            new Proxy(activeProxy.getProtocol(), activeProxy.getHost(), activeProxy.getPort(), null), null
+        );
         final Collection<RemoteRepository> mrepos =
             new ArrayList<RemoteRepository>(repos.size());
         for (final RemoteRepository repo : repos) {
             final RemoteRepository mrepo = selector.getMirror(repo);
-            if (mrepo == null) {
-                mrepos.add(repo);
-            } else {
-                mrepos.add(mrepo);
+            RemoteRepository nrepo = repo;
+            if (mrepo != null) {
+                nrepo = mrepo;
             }
+            final Proxy proxy = proxySelector.getProxy(nrepo);
+            if (proxy != null) {
+                nrepo.setProxy(proxy);
+            }
+            mrepos.add(nrepo);
         }
         return mrepos;
     }
