@@ -131,7 +131,7 @@ public final class Aether {
     public Aether(@NotNull final Collection<RemoteRepository> repos,
         @NotNull final File repo) {
         final Collection<Repository> rlist = new LinkedList<Repository>();
-        for (final RemoteRepository remote : this.mrepos(repos)) {
+        for (final RemoteRepository remote : this.prepos(this.mrepos(repos))) {
             rlist.add(new Repository(remote));
         }
         this.remotes = rlist.toArray(new Repository[repos.size()]);
@@ -190,26 +190,44 @@ public final class Aether {
     private Collection<RemoteRepository> mrepos(
         final Collection<RemoteRepository> repos) {
         final DefaultMirrorSelector selector = this.mirror(this.settings());
-        /** @todo add correct mapping **/
-        org.apache.maven.settings.Proxy activeProxy = this.settings().getActiveProxy();
-        final DefaultProxySelector proxySelector = new DefaultProxySelector().add(
-            new Proxy(activeProxy.getProtocol(), activeProxy.getHost(), activeProxy.getPort(), null), null
-        );
         final Collection<RemoteRepository> mrepos =
             new ArrayList<RemoteRepository>(repos.size());
         for (final RemoteRepository repo : repos) {
             final RemoteRepository mrepo = selector.getMirror(repo);
-            RemoteRepository nrepo = repo;
-            if (mrepo != null) {
-                nrepo = mrepo;
+            if (mrepo == null) {
+                mrepos.add(repo);
+            } else {
+                mrepos.add(mrepo);
             }
-            final Proxy proxy = proxySelector.getProxy(nrepo);
-            if (proxy != null) {
-                nrepo.setProxy(proxy);
-            }
-            mrepos.add(nrepo);
         }
         return mrepos;
+    }
+
+    /**
+     * Build repositories with proxy if it is available.
+     * @param repos List of repositories
+     * @return List of repositories with proxy
+     */
+    private Collection<RemoteRepository> prepos(
+        final Collection<RemoteRepository> repos
+    ) {
+        final org.apache.maven.settings.Proxy proxy = this.settings()
+            .getActiveProxy();
+        if (proxy != null) {
+            final DefaultProxySelector selector = new DefaultProxySelector();
+            selector.add(
+                new Proxy(
+                    proxy.getProtocol(),
+                    proxy.getHost(),
+                    proxy.getPort(),
+                    new Authentication(proxy.getUsername(), proxy.getPassword())
+                ), proxy.getNonProxyHosts()
+            );
+            for (final RemoteRepository repo : repos) {
+                repo.setProxy(selector.getProxy(repo));
+            }
+        }
+        return repos;
     }
 
     /**
