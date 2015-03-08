@@ -91,6 +91,10 @@ import org.sonatype.aether.util.repository.DefaultProxySelector;
  * @checkstyle ClassFanOutComplexity (500 lines)
  * @see <a href="http://sonatype.github.com/sonatype-aether/apidocs/overview-tree.html">Aether 1.13.1 JavaDoc</a>
  * @see Classpath
+ * @todo #11:30min Create an integration test for reading proxy information
+ * from maven settings.xml file that will mock an HTTP server
+ * using jcabi-http, provide a maven configuration file with proxy settings
+ * and verify the expected HTTP requests have been sent to the mocked server.
  */
 @ToString
 @EqualsAndHashCode(of = { "remotes", "lrepo" })
