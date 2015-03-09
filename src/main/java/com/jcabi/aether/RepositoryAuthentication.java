@@ -67,16 +67,20 @@ public final class RepositoryAuthentication {
      * Creates a new authentication with the specified properties.
      * @param auth The authentication object.
      */
-    @SuppressWarnings("PMD.ConfusingTernary")
+    @SuppressWarnings("PMD.NullAssignment")
     public RepositoryAuthentication(final Authentication auth) {
         this.username = auth.getUsername();
-        // @checkstyle AvoidInlineConditionalsCheck (2 lines)
-        this.password = auth.getPassword() != null
-            ? auth.getPassword().toCharArray() : null;
+        if (auth.getPassword() == null) {
+            this.password = null;
+        } else {
+            this.password = auth.getPassword().toCharArray();
+        }
         this.privatekeyfile = auth.getPrivateKeyFile();
-        // @checkstyle AvoidInlineConditionalsCheck (2 lines)
-        this.passphrase = auth.getPassphrase() != null
-            ? auth.getPassphrase().toCharArray() : null;
+        if (auth.getPassphrase() == null) {
+            this.passphrase = null;
+        } else {
+            this.passphrase = auth.getPassphrase().toCharArray();
+        }
     }
 
     /**
