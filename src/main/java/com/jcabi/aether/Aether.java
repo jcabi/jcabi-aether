@@ -63,6 +63,7 @@ import org.sonatype.aether.graph.Dependency;
 import org.sonatype.aether.graph.DependencyFilter;
 import org.sonatype.aether.repository.Authentication;
 import org.sonatype.aether.repository.LocalRepository;
+import org.sonatype.aether.repository.Proxy;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.resolution.DependencyRequest;
@@ -70,6 +71,7 @@ import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.resolution.DependencyResult;
 import org.sonatype.aether.util.filter.DependencyFilterUtils;
 import org.sonatype.aether.util.repository.DefaultMirrorSelector;
+import org.sonatype.aether.util.repository.DefaultProxySelector;
 
 /**
  * Resolver of dependencies for one artifact.
@@ -89,6 +91,10 @@ import org.sonatype.aether.util.repository.DefaultMirrorSelector;
  * @checkstyle ClassFanOutComplexity (500 lines)
  * @see <a href="http://sonatype.github.com/sonatype-aether/apidocs/overview-tree.html">Aether 1.13.1 JavaDoc</a>
  * @see Classpath
+ * @todo #11:30min Create an integration test for reading proxy information
+ *  from maven settings.xml file that will mock an HTTP server
+ *  using jcabi-http, provide a maven configuration file with proxy settings
+ *  and verify the expected HTTP requests have been sent to the mocked server.
  */
 @ToString
 @EqualsAndHashCode(of = { "remotes", "lrepo" })
@@ -129,7 +135,7 @@ public final class Aether {
     public Aether(@NotNull final Collection<RemoteRepository> repos,
         @NotNull final File repo) {
         final Collection<Repository> rlist = new LinkedList<Repository>();
-        for (final RemoteRepository remote : this.mrepos(repos)) {
+        for (final RemoteRepository remote : this.prepos(this.mrepos(repos))) {
             rlist.add(new Repository(remote));
         }
         this.remotes = rlist.toArray(new Repository[repos.size()]);
@@ -199,6 +205,33 @@ public final class Aether {
             }
         }
         return mrepos;
+    }
+
+    /**
+     * Build repositories with proxy if it is available.
+     * @param repos List of repositories
+     * @return List of repositories with proxy
+     */
+    private Collection<RemoteRepository> prepos(
+        final Collection<RemoteRepository> repos
+    ) {
+        final org.apache.maven.settings.Proxy proxy = this.settings()
+            .getActiveProxy();
+        if (proxy != null) {
+            final DefaultProxySelector selector = new DefaultProxySelector();
+            selector.add(
+                new Proxy(
+                    proxy.getProtocol(),
+                    proxy.getHost(),
+                    proxy.getPort(),
+                    new Authentication(proxy.getUsername(), proxy.getPassword())
+                ), proxy.getNonProxyHosts()
+            );
+            for (final RemoteRepository repo : repos) {
+                repo.setProxy(selector.getProxy(repo));
+            }
+        }
+        return repos;
     }
 
     /**
