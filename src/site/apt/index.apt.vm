@@ -38,7 +38,7 @@
 
 Aether adapter for Maven plugins
 
-  {{{https://docs.sonatype.org/display/AETHER/Home}Aether}} is a dependency
+  {{{http://www.eclipse.org/aether/}Aether}} is a dependency
   management toolkit for Maven repositories. It is very convenient to use Aether
   in your Maven plugins, when it's necessary to find a location of certain
   artifact or find out what transitive dependencies it contains. This <<<jcabi-aether>>>
