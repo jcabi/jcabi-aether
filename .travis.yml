@@ -1,2 +1,15 @@
 language: java
-script: mvn clean install -Pqulice
+sudo: false
+jdk:
+  - oraclejdk7
+  - openjdk6
+  - openjdk7
+cache:
+  directories:
+    - $HOME/.m2
+env:
+  global:
+    - MAVEN_OPTS="-XX:MaxPermSize=2g -Xmx4g"
+    - JAVA_OPTS="-XX:MaxPermSize=2g -Xmx4g"
+script: |
+  mvn clean install -Pqulice
