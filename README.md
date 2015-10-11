@@ -5,6 +5,7 @@
 
 [![Build Status](https://travis-ci.org/jcabi/jcabi-aether.svg?branch=master)](https://travis-ci.org/jcabi/jcabi-aether)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-aether/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-aether)
+[![Dependencies](https://www.versioneye.com/user/projects/561ac2e2a193340f32001011/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561ac2e2a193340f32001011)
 
 Aether adapter for Maven plugins
 
