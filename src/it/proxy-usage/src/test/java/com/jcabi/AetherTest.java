@@ -48,9 +48,15 @@ import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 /**
  * Test case for {@link com.jcabi.aether.Aether}.
- * Test proxy congiguration.
  * @author Shelan Perera (shelanrc@gmail.com)
  * @version $Id$
+ * @todo #61:30min Assign a port randomly to container
+ * from settings.xml file.
+ * 1) try to connect to a open and free port
+ * 2) change the settings.xml programmatically by modifying the xml
+ * 3) assign that port to server and start the container
+ *
+ *
  */
 public class AetherTest {
     /**
@@ -62,7 +68,7 @@ public class AetherTest {
     public final transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
-     * Aether go through proxy configuration.
+     * Aether can go through proxy configuration.
      * @throws Exception If something goes wrong.
      */
     @Test(expected = DependencyResolutionException.class)
