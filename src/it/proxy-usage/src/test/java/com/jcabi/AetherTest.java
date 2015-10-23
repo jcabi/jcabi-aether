@@ -74,33 +74,33 @@ public class AetherTest {
     @Test(expected = DependencyResolutionException.class)
     public final void serverTest() throws Exception {
         final MkContainer container = new MkGrizzlyContainer()
-                .next(new MkAnswer.Simple(""))
-                .start(8002);
+            .next(new MkAnswer.Simple(""))
+            .start(8002);
         System.setProperty(
-                "org.apache.maven.user-settings",
-                getClass().getResource("/settings.xml").getPath()
+            "org.apache.maven.user-settings",
+            getClass().getResource("/settings.xml").getPath()
         );
         final Collection<RemoteRepository> remotes = Arrays.asList(
             new RemoteRepository(
-                    "central",
-                    "default",
-                    "http://repo1.maven.org/maven2/"
+                "central",
+                "default",
+                "http://repo1.maven.org/maven2/"
             )
         );
         final File local = this.temp.newFolder();
         new Aether(remotes, local)
             .resolve(
-                    new DefaultArtifact(
-                            "junit",
-                            "junit-dep",
-                            "", "jar", "4.10"
+                new DefaultArtifact(
+                    "junit",
+                    "junit-dep",
+                    "", "jar", "4.10"
                 ),
-                    "runtime"
+                "runtime"
         );
         final MkQuery query = container.take();
         MatcherAssert.assertThat(
-                query.headers().get("Proxy-Authorization"),
-                Matchers.hasItem("Basic cHJveHl1c2VyOnByb3h5cGFzcw==")
+            query.headers().get("Proxy-Authorization"),
+            Matchers.hasItem("Basic cHJveHl1c2VyOnByb3h5cGFzcw==")
         );
     }
 
