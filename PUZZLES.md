@@ -15,4 +15,4 @@ There are 1 active puzzles (13 total):
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<del>28-40ea2a55</del> [`MavenClasspathTest.java:101-101`](../master/src/test/java/com/jcabi/aether/MavenClasspathTest.java#L101-L101)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<del>250-9862dcd5</del> [`AetherTest.java:171-173`](../master/src/test/java/com/jcabi/aether/AetherTest.java#L171-L173)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;[<del>11</del>](https://github.com/jcabi/jcabi-aether/issues/11) [`?`](../master/?)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#61](:https://github.com/jcabi/jcabi-aether/issues/61):[**11-2b91e5db**](https://github.com/jcabi/jcabi-aether/issues/61) [`Aether.java:94-97`](../master/src/main/java/com/jcabi/aether/Aether.java#L94-L97)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#61](https://github.com/jcabi/jcabi-aether/issues/61):[**11-2b91e5db**](https://github.com/jcabi/jcabi-aether/issues/61) [`Aether.java:94-97`](../master/src/main/java/com/jcabi/aether/Aether.java#L94-L97)<br/>
