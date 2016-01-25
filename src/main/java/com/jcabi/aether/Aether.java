@@ -33,9 +33,7 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -43,6 +41,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.maven.settings.Mirror;
@@ -413,13 +412,14 @@ public final class Aether {
     private Settings invokers(final SettingsBuilder builder,
         final SettingsBuildingResult result) {
         Settings main = result.getEffectiveSettings();
-        final Path path = Paths.get(
-            System.getProperty("user.dir"), "..", "interpolated-settings.xml"
-        );
-        if (Files.exists(path)) {
+        final File[] files = new File(System.getProperty("user.dir"))
+            .getParentFile().listFiles(
+                (FileFilter) new NameFileFilter("interpolated-settings.xml")
+            );
+        if (files.length == 1) {
             final DefaultSettingsBuildingRequest irequest =
                 new DefaultSettingsBuildingRequest();
-            irequest.setUserSettingsFile(path.toAbsolutePath().toFile());
+            irequest.setUserSettingsFile(files[0]);
             try {
                 final Settings isettings = builder.build(irequest)
                     .getEffectiveSettings();
