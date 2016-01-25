@@ -415,7 +415,7 @@ public final class Aether {
         final File[] files = new File(System.getProperty("user.dir"))
             .getParentFile().listFiles(
                 (FileFilter) new NameFileFilter("interpolated-settings.xml")
-            );
+        );
         if (files.length == 1) {
             final DefaultSettingsBuildingRequest irequest =
                 new DefaultSettingsBuildingRequest();
