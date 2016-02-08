@@ -36,15 +36,23 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.maven.model.Exclusion;
+import org.apache.maven.model.Parent;
+import org.apache.maven.model.building.DefaultModelBuilder;
+import org.apache.maven.model.building.DefaultModelBuildingRequest;
+import org.apache.maven.model.building.ModelBuildingRequest;
+import org.sonatype.aether.RepositorySystem;
+import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.graph.DependencyFilter;
 import org.sonatype.aether.graph.DependencyNode;
+import org.sonatype.aether.repository.RemoteRepository;
+import org.sonatype.aether.resolution.ArtifactRequest;
 import org.sonatype.aether.resolution.DependencyResolutionException;
+import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.artifact.JavaScopes;
 
 /**
  * One root artifact found in the project.
- *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.7.16
@@ -118,6 +126,47 @@ final class RootArtifact {
      */
     public Artifact artifact() {
         return this.art;
+    }
+
+    /**
+     * Downloads parent artifact from repositories.
+     * @param system The Repository System
+     * @param session The Repository Session
+     * @param repos Repositories to send request
+     * @return Parent artifact
+     * @throws Exception if downloading fails
+     */
+    public Artifact lookUpParent(final RepositorySystem system,
+        final RepositorySystemSession session,
+        final List<RemoteRepository> repos)
+        throws Exception {
+        Artifact result = null;
+        final Parent parent = new DefaultModelBuilder()
+            .build(new DefaultModelBuildingRequest()
+                .setPomFile(this.art.getFile())
+                .setTwoPhaseBuilding(false)
+                .setSystemProperties(System.getProperties())
+                .setValidationLevel(
+                      ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
+                )
+        )
+            .getRawModel()
+            .getParent();
+        if (parent != null) {
+            result = system.resolveArtifact(
+                session,
+                new ArtifactRequest()
+                    .setArtifact(
+                        new DefaultArtifact(
+                            parent.getGroupId(),
+                            parent.getArtifactId(),
+                            "pom",
+                            parent.getVersion()
+                        )
+                ).setRepositories(repos)
+            ).getArtifact();
+        }
+        return result;
     }
 
     /**
