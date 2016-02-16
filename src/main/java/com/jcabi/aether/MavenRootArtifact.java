@@ -33,7 +33,6 @@ import com.jcabi.aspects.Cacheable;
 import com.jcabi.log.Logger;
 import java.util.Collection;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Exclusion;
@@ -51,19 +50,16 @@ final class MavenRootArtifact {
     /**
      * The artifact.
      */
-    @NotNull
     private final transient Artifact art;
 
     /**
      * Exclusions.
      */
-    @NotNull
     private final transient Collection<Exclusion> exclusions;
 
     /**
      * This artifact child artifacts.
      */
-    @NotNull
     private final transient Collection<Artifact> chldrn;
 
     /**
@@ -72,9 +68,8 @@ final class MavenRootArtifact {
      * @param excl Exclusions
      * @param chld Child artifacts
      */
-    protected MavenRootArtifact(@NotNull final Artifact artifact,
-        @NotNull final List<Exclusion> excl,
-        @NotNull final Collection<Artifact> chld) {
+    protected MavenRootArtifact(final Artifact artifact,
+        final List<Exclusion> excl, final Collection<Artifact> chld) {
         this.art = artifact;
         this.exclusions = excl;
         this.chldrn = chld;
@@ -127,7 +122,7 @@ final class MavenRootArtifact {
      * @param artifact The artifact to check
      * @return TRUE if it should be excluded
      */
-    public boolean excluded(@NotNull final Artifact artifact) {
+    public boolean excluded(final Artifact artifact) {
         boolean excluded = false;
         for (final Exclusion exclusion : this.exclusions) {
             if (exclusion.getArtifactId().equals(artifact.getArtifactId())

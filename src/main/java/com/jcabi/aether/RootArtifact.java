@@ -33,7 +33,6 @@ import com.jcabi.aspects.Cacheable;
 import com.jcabi.log.Logger;
 import java.util.Collection;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.maven.model.Exclusion;
 import org.sonatype.aether.artifact.Artifact;
@@ -55,19 +54,16 @@ final class RootArtifact {
     /**
      * The aether for finding children.
      */
-    @NotNull
     private final transient Aether aether;
 
     /**
      * The artifact.
      */
-    @NotNull
     private final transient Artifact art;
 
     /**
      * Exclusions.
      */
-    @NotNull
     private final transient Collection<Exclusion> exclusions;
 
     /**
@@ -76,9 +72,8 @@ final class RootArtifact {
      * @param artifact The artifact
      * @param excl Exclusions
      */
-    protected RootArtifact(@NotNull final Aether aeth,
-        @NotNull final Artifact artifact,
-        @NotNull final Collection<Exclusion> excl) {
+    protected RootArtifact(final Aether aeth,
+        final Artifact artifact, final Collection<Exclusion> excl) {
         this.aether = aeth;
         this.art = artifact;
         this.exclusions = excl;
@@ -138,7 +133,7 @@ final class RootArtifact {
      * @param artifact The artifact to check
      * @return TRUE if it should be excluded
      */
-    public boolean excluded(@NotNull final Artifact artifact) {
+    public boolean excluded(final Artifact artifact) {
         boolean excluded = false;
         for (final Exclusion exclusion : this.exclusions) {
             if (exclusion.getArtifactId().equals(artifact.getArtifactId())

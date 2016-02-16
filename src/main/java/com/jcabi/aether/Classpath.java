@@ -40,7 +40,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -107,8 +106,8 @@ public final class Classpath extends AbstractSet<File> {
      * @param repo Local repository location (directory path)
      * @param scp The scope to use, e.g. "runtime" or "compile"
      */
-    public Classpath(@NotNull final MavenProject prj,
-        @NotNull final File repo, @NotNull final String scp) {
+    public Classpath(final MavenProject prj, final File repo,
+        final String scp) {
         this(prj, repo, Arrays.asList(scp));
     }
 
@@ -118,8 +117,8 @@ public final class Classpath extends AbstractSet<File> {
      * @param repo Local repository location (directory path)
      * @param scps All scopes to include
      */
-    public Classpath(@NotNull final MavenProject prj,
-        @NotNull final File repo, @NotNull final Collection<String> scps) {
+    public Classpath(final MavenProject prj,
+        final File repo, final Collection<String> scps) {
         super();
         this.project = prj;
         this.aether = new Aether(prj, repo);

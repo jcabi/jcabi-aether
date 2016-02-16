@@ -166,45 +166,6 @@ public final class AetherTest {
     }
 
     /**
-     * Aether can reject NULL Maven project.
-     * @throws Exception If there is some problem inside
-     */
-    @Test(expected = java.lang.NullPointerException.class)
-    public void rejectsNullMavenProject() throws Exception {
-        final MavenProject project = null;
-        new Aether(project, this.temp.newFolder());
-    }
-
-    /**
-     * Aether can reject NULL repository path.
-     * @throws Exception If there is some problem inside
-     */
-    @Test(expected = java.lang.NullPointerException.class)
-    public void rejectsNullRepoPath() throws Exception {
-        new Aether(this.project(), null);
-    }
-
-    /**
-     * Aether can reject NULL artifact.
-     * @throws Exception If there is some problem inside
-     */
-    @Test(expected = java.lang.NullPointerException.class)
-    public void rejectsNullArtifact() throws Exception {
-        new Aether(this.project(), this.temp.newFolder())
-            .resolve(null, JavaScopes.RUNTIME);
-    }
-
-    /**
-     * Aether can reject NULL scope.
-     * @throws Exception If there is some problem inside
-     */
-    @Test(expected = java.lang.NullPointerException.class)
-    public void rejectsNullScope() throws Exception {
-        new Aether(this.project(), this.temp.newFolder())
-            .resolve(new DefaultArtifact("junit:junit:4.10"), null);
-    }
-
-    /**
      * Aether can throw on non-found artifact.
      * @throws Exception If there is some problem inside
      */

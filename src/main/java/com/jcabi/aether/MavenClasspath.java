@@ -41,7 +41,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
@@ -115,9 +114,8 @@ public final class MavenClasspath extends AbstractSet<File> {
      * @param sess Maven session.
      * @param scp The scope to use, e.g. "runtime" or "compile"
      */
-    public MavenClasspath(@NotNull final DependencyGraphBuilder bldr,
-        @NotNull final MavenSession sess,
-        @NotNull final String scp) {
+    public MavenClasspath(final DependencyGraphBuilder bldr,
+        final MavenSession sess, final String scp) {
         this(bldr, sess, Arrays.asList(scp));
     }
 
@@ -127,9 +125,8 @@ public final class MavenClasspath extends AbstractSet<File> {
      * @param sess Maven session.
      * @param scps All scopes to include
      */
-    public MavenClasspath(@NotNull final DependencyGraphBuilder bldr,
-        @NotNull final MavenSession sess,
-        @NotNull final Collection<String> scps) {
+    public MavenClasspath(final DependencyGraphBuilder bldr,
+        final MavenSession sess, final Collection<String> scps) {
         super();
         this.builder = bldr;
         this.session = sess;

@@ -41,7 +41,6 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.lang3.Validate;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.maven.settings.Mirror;
@@ -135,8 +134,6 @@ public final class Aether {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Aether(final Collection<RemoteRepository> repos,
         final File repo) {
-        Validate.notNull(repos, "repos cannot be null");
-        Validate.notNull(repo, "repo cannot be null");
         final Collection<Repository> rlist = new LinkedList<Repository>();
         for (final RemoteRepository remote : this.prepos(this.mrepos(repos))) {
             rlist.add(new Repository(remote));
@@ -154,8 +151,6 @@ public final class Aether {
      */
     public List<Artifact> resolve(final Artifact root,
         final String scope) throws DependencyResolutionException {
-        Validate.notNull(root, "root parameter cannot be null");
-        Validate.notNull(scope, "scope parameter cannot be null");
         final DependencyFilter filter =
             DependencyFilterUtils.classpathFilter(scope);
         if (filter == null) {
@@ -177,9 +172,6 @@ public final class Aether {
     public List<Artifact> resolve(final Artifact root,
         final String scope, final DependencyFilter filter)
         throws DependencyResolutionException {
-        Validate.notNull(root, "root cannot be null");
-        Validate.notNull(scope, "scope cannot be null");
-        Validate.notNull(filter, "filter cannot be null");
         final Dependency rdep = new Dependency(root, scope);
         final CollectRequest crq = this.request(rdep);
         final List<Artifact> deps = new LinkedList<Artifact>();

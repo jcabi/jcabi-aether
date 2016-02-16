@@ -93,6 +93,7 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.kuali.maven.wagons</groupId>
