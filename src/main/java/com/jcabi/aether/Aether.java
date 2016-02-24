@@ -93,7 +93,6 @@ import org.sonatype.aether.util.repository.DefaultProxySelector;
  *  from maven settings.xml file that will mock an HTTP server
  *  using jcabi-http, provide a maven configuration file with proxy settings
  *  and verify the expected HTTP requests have been sent to the mocked server.
- * @todo #69:30min Fix NullPointerExceptions in CL build for Open JDK6.
  * @todo #69:30min Fix UnsupportedClassVersionError in CL build for Open JDK6.
  */
 @ToString
