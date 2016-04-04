@@ -16,6 +16,6 @@ There are 3 active puzzles (16 total):
 &nbsp;&nbsp;&nbsp;&nbsp;<del>250-9862dcd5</del> [`AetherTest.java:171-173`](../master/src/test/java/com/jcabi/aether/AetherTest.java#L171-L173)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;[<del>11</del>](https://github.com/jcabi/jcabi-aether/issues/11) [`?`](../master/?)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#61](https://github.com/jcabi/jcabi-aether/issues/61):[**11-2b91e5db**](https://github.com/jcabi/jcabi-aether/issues/61) [`Aether.java:94-97`](../master/src/main/java/com/jcabi/aether/Aether.java#L94-L97)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;[#69](https://github.com/jcabi/jcabi-aether/issues/69):[<del>69</del>](https://github.com/jcabi/jcabi-aether/issues/69) [`?`](../master/?)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[<del>69</del>](https://github.com/jcabi/jcabi-aether/issues/69) [`?`](../master/?)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#78](https://github.com/jcabi/jcabi-aether/issues/78):[**69-fd6545e6**](https://github.com/jcabi/jcabi-aether/issues/78) [`Aether.java:97-97`](../master/src/main/java/com/jcabi/aether/Aether.java#L97-L97)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#79](https://github.com/jcabi/jcabi-aether/issues/79):[**69-46002db1**](https://github.com/jcabi/jcabi-aether/issues/79) [`Aether.java:98-98`](../master/src/main/java/com/jcabi/aether/Aether.java#L98-L98)<br/>
