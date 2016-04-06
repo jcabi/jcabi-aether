@@ -41,21 +41,21 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 # Basic Linux tools
-RUN apt-get update
-RUN apt-get install -y wget bcrypt curl
-RUN apt-get install -y unzip zip
-RUN apt-get install -y gnupg gnupg2
-RUN apt-get install -y jq
-RUN apt-get install -y bsdmainutils
-RUN apt-get install -y libxml2-utils
-RUN apt-get install -y build-essential
-RUN apt-get install -y automake autoconf
+RUN apt-get update & apt-get install -y \
+    wget bcrypt curl \
+    unzip zip \
+    gnupg gnupg2 \
+    jq \
+    bsdmainutils \
+    libxml2-utils \
+    build-essential \
+    automake autoconf
 
 # Git 2.0
 RUN apt-get install -y software-properties-common python-software-properties
 RUN add-apt-repository ppa:git-core/ppa
-RUN apt-get update
-RUN apt-get install -y git git-core
+RUN apt-get update & apt-get install -y \
+    git git-core
 
 # SSH Daemon
 RUN apt-get install -y ssh && \
@@ -65,34 +65,9 @@ RUN apt-get install -y ssh && \
 # Ruby
 RUN apt-get install -y libmagic-dev zlib1g-dev
 RUN apt-add-repository ppa:brightbox/ruby-ng
-RUN apt-get update
-RUN apt-get install -y ruby2.2 ruby2.2-dev
+RUN apt-get update & apt-get install -y \
+    ruby2.2 ruby2.2-dev
 RUN gem update && gem install nokogiri && gem install bundler
-
-# Ruby via RVM
-#RUN apt-add-repository -y ppa:rael-gc/rvm
-#RUN apt-get update
-#RUN sudo apt-get install -y rvm
-#RUN /bin/bash -l -c "rvm install ruby"
-#RUN /bin/bash -l -c "gem update"
-#RUN /bin/bash -l -c "gem install nokogiri"
-#RUN /bin/bash -l -c "gem install bundler"
-#RUN echo 'source /usr/share/rvm/scripts/rvm' >> /etc/bash.bashrc
-
-# PHP
-RUN apt-get install -y php5 php5-dev php-pear
-RUN curl --silent --show-error https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
-RUN mkdir jsl && \
-  wget --quiet http://www.javascriptlint.com/download/jsl-0.3.0-src.tar.gz && \
-  tar xzf jsl-0.3.0-src.tar.gz && \
-  cd jsl-0.3.0/src && \
-  make -f Makefile.ref && \
-  mv Linux_All_DBG.OBJ/jsl /usr/local/bin && \
-  cd .. && \
-  rm -rf jsl
-# RUN pecl install xdebug-beta && \
-#   echo "zend_extension=xdebug.so" > /etc/php5/cli/conf.d/xdebug.ini
 
 # Java
 RUN apt-get install -y default-jdk
@@ -101,13 +76,6 @@ RUN apt-get install -y gdebi && \
   gdebi --non-interactive maven3_3.2.1-0~ppa1_all.deb && \
   ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn && \
   rm -rf maven3_3.2.1-0~ppa1_all.deb
-
-# LaTeX
-RUN apt-get install -y texlive-latex-extra
-RUN apt-get install -y xzdec
-RUN tlmgr init-usertree
-RUN tlmgr install helvetic
-RUN tlmgr install psnfss
 
 # PhantomJS
 RUN apt-get install -y phantomjs
