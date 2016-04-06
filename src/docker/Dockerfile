@@ -88,10 +88,6 @@ RUN apt-get install -y nodejs npm
 RUN sudo npm install -g npm
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
-# One more time, right before the end
-RUN apt-get update -y
-RUN apt-get upgrade -qq -y
-
 # Clean up
 RUN rm -rf /tmp/*
 RUN rm -rf /root/.ssh
