@@ -97,8 +97,8 @@ import org.sonatype.aether.util.repository.DefaultProxySelector;
  * @todo #69:30min Fix UnsupportedClassVersionError in CL build for Open JDK6.
  * @todo #82:30min Clean unnecessary docker setup (src/docler/Dockerfile),
  *  make the configuration minimal. Set versions to the used packages
- *  (e.g. lock java version instead of default jdk). Discuss with architect
- *  the needed versions.
+ *  (e.g. lock java version instead of default jdk). After changes, the file
+ *  needs to be uploaded to Dockerhub and be built there.
  */
 @ToString
 @EqualsAndHashCode(of = { "remotes", "lrepo" })
