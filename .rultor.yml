@@ -4,6 +4,8 @@ architect:
 install:
 - sudo gem install --no-ri --no-rdoc pdd
 - sudo gem install --no-ri --no-rdoc est
+docker:
+  image: yegor256/jcabi-aether
 assets:
   secring.gpg: yegor256/home#assets/secring.gpg
   settings.xml: yegor256/home#assets/jcabi/settings.xml
