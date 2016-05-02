@@ -18,7 +18,6 @@ merge:
     pdd --source=$(pwd) --verbose --file=/dev/null
     est --dir=est --file=/dev/null
   commanders:
-  - caarlos0
   - carlosmiranda
   - darkled
   - dmzaytsev
