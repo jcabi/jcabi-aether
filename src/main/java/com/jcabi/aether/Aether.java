@@ -175,15 +175,16 @@ public final class Aether {
     public List<Artifact> resolve(final Artifact root,
         final String scope, final DependencyFilter filter)
         throws DependencyResolutionException {
-        final Dependency rdep = new Dependency(root, scope);
-        final CollectRequest crq = this.request(rdep);
         final List<Artifact> deps = new LinkedList<Artifact>();
         final RepositorySystem system = new RepositorySystemBuilder().build();
         deps.addAll(
             this.fetch(
                 system,
                 this.session(system),
-                new DependencyRequest(crq, filter)
+                new DependencyRequest(
+                    this.request(new Dependency(root, scope)),
+                    filter
+                )
             )
         );
         return deps;
