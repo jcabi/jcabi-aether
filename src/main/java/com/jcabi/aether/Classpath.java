@@ -30,6 +30,7 @@
 package com.jcabi.aether;
 
 import com.jcabi.aspects.Loggable;
+
 import java.io.File;
 import java.util.AbstractSet;
 import java.util.Arrays;
@@ -40,7 +41,9 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 import lombok.EqualsAndHashCode;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.model.Dependency;
@@ -107,7 +110,7 @@ public final class Classpath extends AbstractSet<File> {
      * @param scp The scope to use, e.g. "runtime" or "compile"
      */
     public Classpath(final MavenProject prj, final File repo,
-        final String scp) {
+        final String... scp) {
         this(prj, repo, Arrays.asList(scp));
     }
 

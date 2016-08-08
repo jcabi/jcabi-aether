@@ -115,7 +115,7 @@ public final class MavenClasspath extends AbstractSet<File> {
      * @param scp The scope to use, e.g. "runtime" or "compile"
      */
     public MavenClasspath(final DependencyGraphBuilder bldr,
-        final MavenSession sess, final String scp) {
+        final MavenSession sess, final String... scp) {
         this(bldr, sess, Arrays.asList(scp));
     }
 
