@@ -92,8 +92,9 @@ public final class ClasspathTest {
             )
         );
     }
-/**
-     * Classpath can build a classpath with more scopes
+
+    /**
+     * Classpath can build a classpath with more scopes.
      * @throws Exception If there is some problem inside
      */
     @Test
@@ -102,7 +103,7 @@ public final class ClasspathTest {
             new Classpath(
                 this.project(
                     this.dependency(
-                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.10"
+                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.12"
                     )
                 ), this.temp.newFolder(), JavaScopes.TEST, JavaScopes.COMPILE
             ),
@@ -116,8 +117,7 @@ public final class ClasspathTest {
                         )
                     )
                 ),
-                Matchers.hasToString(Matchers.endsWith("junit-4.10.jar")),
-                Matchers.hasToString(Matchers.endsWith("hamcrest-core-1.1.jar"))
+                Matchers.hasToString(Matchers.endsWith("junit-4.12.jar"))
             )
         );
     }

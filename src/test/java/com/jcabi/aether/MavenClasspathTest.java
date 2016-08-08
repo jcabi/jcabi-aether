@@ -45,6 +45,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
+import org.sonatype.aether.util.artifact.JavaScopes;
 
 /**
  * Test case for {@link com.jcabi.aether.MavenClasspath}.
@@ -53,6 +54,11 @@ import org.mockito.Mockito;
  */
 @SuppressWarnings("unchecked")
 public final class MavenClasspathTest {
+
+    /**
+     * Group of test artifact.
+     */
+    private static final String GROUP = "junit";
 
     /**
      * Temp dir.
@@ -67,23 +73,22 @@ public final class MavenClasspathTest {
      */
     @Test
     public void buildsClasspath() throws Exception {
-        final Dependency dep = new Dependency();
-        final String group = "junit";
-        dep.setGroupId(group);
-        dep.setArtifactId(group);
-        dep.setVersion("4.10");
-        dep.setScope("test");
         final String jar = "junit-4.10.jar";
         final DependencyGraphBuilder builder = this.builder(jar);
         final MavenSession session = Mockito.mock(MavenSession.class);
-        final MavenProject project = this.project(dep);
+        final MavenProject project = this.project(
+            this.dependency(
+                MavenClasspathTest.GROUP, MavenClasspathTest.GROUP, "4.10"
+            )
+        );
         Mockito.when(session.getCurrentProject()).thenReturn(project);
         MatcherAssert.assertThat(
-            new MavenClasspath(builder, session, MavenClasspath.TEST_SCOPE),
+            new MavenClasspath(builder, session, JavaScopes.TEST),
             Matchers.<File>hasItems(
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
+                            // @checkstyle MultipleStringLiterals (2 lines)
                             "%sas%<sdirectory",
                             System.getProperty("file.separator")
                         )
@@ -100,28 +105,27 @@ public final class MavenClasspathTest {
      */
     @Test
     public void buildsClasspathWithMoreScopes() throws Exception {
-        final Dependency dep = new Dependency();
-        final String group = "junit";
-        dep.setGroupId(group);
-        dep.setArtifactId(group);
-        dep.setVersion("4.10");
-        dep.setScope("test");
-        final String jar = "junit-4.10.jar";
+        final String jar = "junit-4.11.jar";
         final DependencyGraphBuilder builder = this.builder(jar);
         final MavenSession session = Mockito.mock(MavenSession.class);
-        final MavenProject project = this.project(dep);
+        final MavenProject project = this.project(
+            this.dependency(
+                MavenClasspathTest.GROUP, MavenClasspathTest.GROUP, "4.11"
+            )
+        );
         Mockito.when(session.getCurrentProject()).thenReturn(project);
         MatcherAssert.assertThat(
             new MavenClasspath(
                 builder,
                 session,
-                MavenClasspath.TEST_SCOPE,
-                MavenClasspath.COMPILE_SCOPE
+                JavaScopes.TEST,
+                JavaScopes.COMPILE
             ),
             Matchers.<File>hasItems(
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
+                            // @checkstyle MultipleStringLiterals (2 lines)
                             "%sas%<sdirectory",
                             System.getProperty("file.separator")
                         )
@@ -131,18 +135,13 @@ public final class MavenClasspathTest {
             )
         );
     }
-    
+
     /**
      * Classpath can return a string when a dependency is broken.
      * @throws Exception If there is some problem inside
      */
     @Test
     public void hasToStringWithBrokenDependency() throws Exception {
-        final Dependency dep = new Dependency();
-        dep.setGroupId("junit-broken");
-        dep.setArtifactId("junit-absent");
-        dep.setVersion("1.0");
-        dep.setScope(MavenClasspath.TEST_SCOPE);
         final DependencyGraphBuilder builder =
             Mockito.mock(DependencyGraphBuilder.class);
         Mockito.doThrow(
@@ -154,7 +153,11 @@ public final class MavenClasspathTest {
                 Mockito.any(ArtifactFilter.class)
             );
         final MavenSession session = Mockito.mock(MavenSession.class);
-        final MavenProject project = this.project(dep);
+        final MavenProject project = this.project(
+            this.dependency(
+                "junit-broken", "junit-absent", "1.0"
+            )
+        );
         Mockito.when(session.getCurrentProject()).thenReturn(project);
         final MavenClasspath classpath = new MavenClasspath(
             builder, session, MavenClasspath.TEST_SCOPE
@@ -173,15 +176,14 @@ public final class MavenClasspathTest {
      */
     @Test
     public void comparesToAnotherClasspath() throws Exception {
-        final Dependency dep = new Dependency();
-        dep.setGroupId("org.apache.commons");
-        dep.setArtifactId("commons-lang3-absent");
-        dep.setVersion("3.0");
-        dep.setScope(MavenClasspath.COMPILE_SCOPE);
         final DependencyGraphBuilder builder =
             Mockito.mock(DependencyGraphBuilder.class);
         final MavenSession session = Mockito.mock(MavenSession.class);
-        final MavenProject project = this.project(dep);
+        final MavenProject project = this.project(
+            this.dependency(
+                "org.apache.commons", "commons-lang3-absent", "3.0"
+            )
+        );
         Mockito.when(session.getCurrentProject()).thenReturn(project);
         final MavenClasspath classpath = new MavenClasspath(
             builder, session, MavenClasspath.TEST_SCOPE
@@ -231,6 +233,23 @@ public final class MavenClasspathTest {
             .when(project).getTestClasspathElements();
         Mockito.doReturn(Arrays.asList(dep)).when(project).getDependencies();
         return project;
+    }
+
+    /**
+     * Create test dependency.
+     * @param group Dependency group
+     * @param artifact Dependency artifact ID
+     * @param version Dependency Version
+     * @return Created dependency.
+     */
+    private Dependency dependency(final String group, final String artifact,
+        final String version) {
+        final Dependency dep = new Dependency();
+        dep.setGroupId(group);
+        dep.setArtifactId(artifact);
+        dep.setVersion(version);
+        dep.setScope(JavaScopes.TEST);
+        return dep;
     }
 
 }
