@@ -62,7 +62,7 @@ public final class MavenClasspathTest {
     public final transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
-     * Classpath can build a classpath.
+     * MavenClasspath can build a classpath.
      * @throws Exception If there is some problem inside
      */
     @Test
@@ -94,6 +94,44 @@ public final class MavenClasspathTest {
         );
     }
 
+    /**
+     * MavenClasspath can build a classpath when there are more scopes.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsClasspathWithMoreScopes() throws Exception {
+        final Dependency dep = new Dependency();
+        final String group = "junit";
+        dep.setGroupId(group);
+        dep.setArtifactId(group);
+        dep.setVersion("4.10");
+        dep.setScope("test");
+        final String jar = "junit-4.10.jar";
+        final DependencyGraphBuilder builder = this.builder(jar);
+        final MavenSession session = Mockito.mock(MavenSession.class);
+        final MavenProject project = this.project(dep);
+        Mockito.when(session.getCurrentProject()).thenReturn(project);
+        MatcherAssert.assertThat(
+            new MavenClasspath(
+                builder,
+                session,
+                MavenClasspath.TEST_SCOPE,
+                MavenClasspath.COMPILE_SCOPE
+            ),
+            Matchers.<File>hasItems(
+                Matchers.hasToString(
+                    Matchers.endsWith(
+                        String.format(
+                            "%sas%<sdirectory",
+                            System.getProperty("file.separator")
+                        )
+                    )
+                ),
+                Matchers.hasToString(Matchers.endsWith(jar))
+            )
+        );
+    }
+    
     /**
      * Classpath can return a string when a dependency is broken.
      * @throws Exception If there is some problem inside

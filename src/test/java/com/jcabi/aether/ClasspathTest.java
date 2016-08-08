@@ -92,6 +92,35 @@ public final class ClasspathTest {
             )
         );
     }
+/**
+     * Classpath can build a classpath with more scopes
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsClasspathWithMoreScopes() throws Exception {
+        MatcherAssert.assertThat(
+            new Classpath(
+                this.project(
+                    this.dependency(
+                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.10"
+                    )
+                ), this.temp.newFolder(), JavaScopes.TEST, JavaScopes.COMPILE
+            ),
+            Matchers.<File>hasItems(
+                Matchers.hasToString(
+                    Matchers.endsWith(
+                        String.format(
+                            // @checkstyle MultipleStringLiterals (2 lines)
+                            "%sas%<sdirectory",
+                            System.getProperty("file.separator")
+                        )
+                    )
+                ),
+                Matchers.hasToString(Matchers.endsWith("junit-4.10.jar")),
+                Matchers.hasToString(Matchers.endsWith("hamcrest-core-1.1.jar"))
+            )
+        );
+    }
 
     /**
      * Classpath should return artifact with highest version number.

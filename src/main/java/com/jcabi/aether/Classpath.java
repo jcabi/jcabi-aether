@@ -107,11 +107,11 @@ public final class Classpath extends AbstractSet<File> {
      * Public ctor.
      * @param prj The Maven project
      * @param repo Local repository location (directory path)
-     * @param scp The scope to use, e.g. "runtime" or "compile"
+     * @param scps The scopes to use, e.g. "runtime", "compile" etc
      */
     public Classpath(final MavenProject prj, final File repo,
-        final String... scp) {
-        this(prj, repo, Arrays.asList(scp));
+        final String... scps) {
+        this(prj, repo, Arrays.asList(scps));
     }
 
     /**
