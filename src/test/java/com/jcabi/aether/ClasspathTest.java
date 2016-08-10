@@ -112,7 +112,7 @@ public final class ClasspathTest {
             new Classpath(
                 this.project(
                     this.dependency(
-                        ClasspathTest.GROUP, ClasspathTest.GROUP, "4.12"
+                        "com.jcabi", "jcabi-ssh", "1.5.2"
                     )
                 ), this.temp.newFolder(), JavaScopes.TEST, JavaScopes.COMPILE
             ),
@@ -125,7 +125,7 @@ public final class ClasspathTest {
                         )
                     )
                 ),
-                Matchers.hasToString(Matchers.endsWith("junit-4.12.jar"))
+                Matchers.hasToString(Matchers.endsWith(".jar"))
             )
         );
     }
@@ -155,9 +155,8 @@ public final class ClasspathTest {
                     Matchers.hasToString(
                         Matchers.endsWith(
                             String.format(
-                                // @checkstyle MultipleStringLiterals (2 lines)
-                                "%sas%<sdirectory",
-                                System.getProperty("file.separator")
+                                ClasspathTest.SDIR
+                                System.getProperty(ClasspathTest.FILE_SEP)
                             )
                         )
                     ),
