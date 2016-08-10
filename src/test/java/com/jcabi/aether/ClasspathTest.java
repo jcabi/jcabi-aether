@@ -57,6 +57,16 @@ public final class ClasspathTest {
     private static final String GROUP = "junit";
 
     /**
+     * Sdirectory format.
+     */
+    private static final String SDIR = "%sas%<sdirectory";
+
+    /**
+     * File separator.
+     */
+    private static final String FILE_SEP = "file.separator";
+
+    /**
      * Temp dir.
      * @checkstyle VisibilityModifier (3 lines)
      */
@@ -81,9 +91,8 @@ public final class ClasspathTest {
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
-                            // @checkstyle MultipleStringLiterals (2 lines)
-                            "%sas%<sdirectory",
-                            System.getProperty("file.separator")
+                            ClasspathTest.SDIR,
+                            System.getProperty(ClasspathTest.FILE_SEP)
                         )
                     )
                 ),
@@ -111,9 +120,8 @@ public final class ClasspathTest {
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
-                            // @checkstyle MultipleStringLiterals (2 lines)
-                            "%sas%<sdirectory",
-                            System.getProperty("file.separator")
+                            ClasspathTest.SDIR,
+                            System.getProperty(ClasspathTest.FILE_SEP)
                         )
                     )
                 ),
