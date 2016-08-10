@@ -155,7 +155,7 @@ public final class ClasspathTest {
                     Matchers.hasToString(
                         Matchers.endsWith(
                             String.format(
-                                ClasspathTest.SDIR
+                                ClasspathTest.SDIR,
                                 System.getProperty(ClasspathTest.FILE_SEP)
                             )
                         )
