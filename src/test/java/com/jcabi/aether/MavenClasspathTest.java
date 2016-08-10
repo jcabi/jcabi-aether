@@ -116,10 +116,7 @@ public final class MavenClasspathTest {
         Mockito.when(session.getCurrentProject()).thenReturn(project);
         MatcherAssert.assertThat(
             new MavenClasspath(
-                builder,
-                session,
-                JavaScopes.TEST,
-                JavaScopes.COMPILE
+                builder, session, JavaScopes.TEST, JavaScopes.COMPILE
             ),
             Matchers.<File>hasItems(
                 Matchers.hasToString(
@@ -240,7 +237,7 @@ public final class MavenClasspathTest {
      * @param group Dependency group
      * @param artifact Dependency artifact ID
      * @param version Dependency Version
-     * @return Created dependency.
+     * @return Created dependency
      */
     private Dependency dependency(final String group, final String artifact,
         final String version) {
