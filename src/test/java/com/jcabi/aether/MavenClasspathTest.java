@@ -113,7 +113,9 @@ public final class MavenClasspathTest {
         final String artf = "jcabi-xml";
         final String vrs = "0.17.2";
         final String jar = "%s-%s.jar";
-        final DependencyGraphBuilder builder = this.builder(String.format(jar, artf, vrs));
+        final DependencyGraphBuilder builder = this.builder(
+            String.format(jar, artf, vrs)
+        );
         final MavenSession session = Mockito.mock(MavenSession.class);
         final MavenProject project = this.project(
             this.dependency("com.jcabi", artf, vrs)
@@ -132,7 +134,11 @@ public final class MavenClasspathTest {
                         )
                     )
                 ),
-                Matchers.hasToString(Matchers.endsWith(String.format(jar, artf, vrs)))
+                Matchers.hasToString(
+                    Matchers.endsWith(
+                        String.format(jar, artf, vrs)
+                    )
+                )
             )
         );
     }

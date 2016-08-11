@@ -109,7 +109,7 @@ public final class ClasspathTest {
     @Test
     public void buildsClasspathWithMoreScopes() throws Exception {
         final String artf = "jcabi-ssh";
-    	final String vrs = "1.5.2";
+        final String vrs = "1.5.2";
         MatcherAssert.assertThat(
             new Classpath(
                 this.project(this.dependency("com.jcabi", artf, vrs)),
