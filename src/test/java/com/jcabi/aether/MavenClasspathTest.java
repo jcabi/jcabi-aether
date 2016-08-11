@@ -55,16 +55,16 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 @SuppressWarnings("unchecked")
 public final class MavenClasspathTest {
 
-	/**
+    /**
      * Sdirectory format.
      */
-	private static final String SDIR = "%sas%<sdirectory";
+    private static final String SDIR = "%sas%<sdirectory";
 
-	/**
-	 * File separator.
-	 */
-	private static final String FILE_SEP = "file.separator";
-	
+    /**
+     * File separator.
+     */
+    private static final String FILE_SEP = "file.separator";
+
     /**
      * Temp dir.
      * @checkstyle VisibilityModifier (3 lines)
@@ -78,7 +78,7 @@ public final class MavenClasspathTest {
      */
     @Test
     public void buildsClasspath() throws Exception {
-    	final String group = "junit";
+        final String group = "junit";
         final String jar = "junit-4.10.jar";
         final DependencyGraphBuilder builder = this.builder(jar);
         final MavenSession session = Mockito.mock(MavenSession.class);
