@@ -55,11 +55,16 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 @SuppressWarnings("unchecked")
 public final class MavenClasspathTest {
 
-    /**
-     * Group of test artifact.
+	/**
+     * Sdirectory format.
      */
-    private static final String GROUP = "junit";
+	private static final String SDIR = "%sas%<sdirectory";
 
+	/**
+	 * File separator.
+	 */
+	private static final String FILE_SEP = "file.separator";
+	
     /**
      * Temp dir.
      * @checkstyle VisibilityModifier (3 lines)
@@ -73,12 +78,13 @@ public final class MavenClasspathTest {
      */
     @Test
     public void buildsClasspath() throws Exception {
+    	final String group = "junit";
         final String jar = "junit-4.10.jar";
         final DependencyGraphBuilder builder = this.builder(jar);
         final MavenSession session = Mockito.mock(MavenSession.class);
         final MavenProject project = this.project(
             this.dependency(
-                MavenClasspathTest.GROUP, MavenClasspathTest.GROUP, "4.10"
+                group, group, "4.10"
             )
         );
         Mockito.when(session.getCurrentProject()).thenReturn(project);
@@ -88,9 +94,8 @@ public final class MavenClasspathTest {
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
-                            // @checkstyle MultipleStringLiterals (2 lines)
-                            "%sas%<sdirectory",
-                            System.getProperty("file.separator")
+                            MavenClasspathTest.SDIR,
+                            System.getProperty(MavenClasspathTest.FILE_SEP)
                         )
                     )
                 ),
@@ -105,12 +110,12 @@ public final class MavenClasspathTest {
      */
     @Test
     public void buildsClasspathWithMoreScopes() throws Exception {
-        final String jar = "junit-4.11.jar";
+        final String jar = "jcabi-xml-0.17.2.jar";
         final DependencyGraphBuilder builder = this.builder(jar);
         final MavenSession session = Mockito.mock(MavenSession.class);
         final MavenProject project = this.project(
             this.dependency(
-                MavenClasspathTest.GROUP, MavenClasspathTest.GROUP, "4.11"
+                "com.jcabi", "jcabi-xml", "0.17.2"
             )
         );
         Mockito.when(session.getCurrentProject()).thenReturn(project);
@@ -122,9 +127,8 @@ public final class MavenClasspathTest {
                 Matchers.hasToString(
                     Matchers.endsWith(
                         String.format(
-                            // @checkstyle MultipleStringLiterals (2 lines)
-                            "%sas%<sdirectory",
-                            System.getProperty("file.separator")
+                            MavenClasspathTest.SDIR,
+                            System.getProperty(MavenClasspathTest.FILE_SEP)
                         )
                     )
                 ),

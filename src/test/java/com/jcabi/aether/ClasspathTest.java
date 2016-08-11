@@ -108,11 +108,12 @@ public final class ClasspathTest {
      */
     @Test
     public void buildsClasspathWithMoreScopes() throws Exception {
+    	final String vrs = "1.5.2";
         MatcherAssert.assertThat(
             new Classpath(
                 this.project(
                     this.dependency(
-                        "com.jcabi", "jcabi-ssh", "1.5.2"
+                        "com.jcabi", "jcabi-ssh", vrs
                     )
                 ), this.temp.newFolder(), JavaScopes.TEST, JavaScopes.COMPILE
             ),
@@ -125,7 +126,9 @@ public final class ClasspathTest {
                         )
                     )
                 ),
-                Matchers.hasToString(Matchers.endsWith(".jar"))
+                Matchers.hasToString(
+                    Matchers.endsWith(String.format("jcabi-ssh-%s.jar", vrs))
+                )
             )
         );
     }
