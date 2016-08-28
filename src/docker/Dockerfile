@@ -58,7 +58,7 @@ RUN add-apt-repository ppa:git-core/ppa
 RUN apt-get update && apt-get install -y git git-core
 
 # Java
-RUN apt-get install -y openjdk-7-jdk="$OPENJDK_VERSION"
+RUN apt-get install -y openjdk-7-jdk="${OPENJDK_VERSION}"
 
 # Maven
 RUN apt-get install -y gdebi && \
