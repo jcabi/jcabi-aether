@@ -32,6 +32,7 @@ LABEL Description="This is the image for aether.jcabi.com" Vendor="jcabi.com" Ve
 WORKDIR /tmp
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV OPENJDK_VERSION 1.7.0_75
 
 # UTF-8 locale
 RUN locale-gen en_US en_US.UTF-8
@@ -56,38 +57,15 @@ RUN apt-get install -y software-properties-common python-software-properties
 RUN add-apt-repository ppa:git-core/ppa
 RUN apt-get update && apt-get install -y git git-core
 
-# SSH Daemon
-RUN apt-get install -y ssh && \
-  mkdir /var/run/sshd && \
-  chmod 0755 /var/run/sshd
-
-# Ruby
-RUN apt-get install -y libmagic-dev zlib1g-dev
-RUN apt-add-repository ppa:brightbox/ruby-ng
-RUN apt-get update
-RUN apt-get install -y ruby2.2 ruby2.2-dev
-RUN gem update
-RUN gem install nokogiri
-RUN gem install bundler
-
 # Java
-RUN apt-get install -y default-jdk
+RUN apt-get install -y openjdk-7-jdk="$OPENJDK_VERSION"
+
+# Maven
 RUN apt-get install -y gdebi && \
   wget --quiet http://ppa.launchpad.net/natecarlson/maven3/ubuntu/pool/main/m/maven3/maven3_3.2.1-0~ppa1_all.deb && \
   gdebi --non-interactive maven3_3.2.1-0~ppa1_all.deb && \
   ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn && \
   rm -rf maven3_3.2.1-0~ppa1_all.deb
-
-# PhantomJS
-RUN apt-get install -y phantomjs
-
-# S3cmd for AWS S3 integration
-RUN apt-get install -y s3cmd
-
-# NodeJS
-RUN apt-get install -y nodejs npm
-RUN sudo npm install -g npm
-RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Clean up
 RUN rm -rf /tmp/*
