@@ -58,7 +58,15 @@ RUN add-apt-repository ppa:git-core/ppa
 RUN apt-get update && apt-get install -y git git-core
 
 # Java
-RUN apt-get install -y openjdk-7-jdk="${OPENJDK_VERSION}"
+RUN apt-get update && apt-get install -y \
+    openjdk-7-jdk="${OPENJDK_VERSION}"
+
+# Ruby; for puzzle creation
+RUN apt-get update && apt-get install -y \
+    libmagic-dev zlib1g-dev
+RUN apt-add-repository ppa:brightbox/ruby-ng
+RUN apt-get update && apt-get install -y \
+    ruby2.2 ruby2.2-dev
 
 # Maven
 RUN apt-get install -y gdebi && \
