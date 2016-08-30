@@ -30,9 +30,8 @@ FROM ubuntu:14.04
 MAINTAINER Yegor Bugayenko <yegor@teamed.io>
 LABEL Description="This is the image for aether.jcabi.com" Vendor="jcabi.com" Version="1.0"
 WORKDIR /tmp
-
+ENV OPENJDK_VERSION 7u111-2.6.7-0ubuntu0.14.04.3
 ENV DEBIAN_FRONTEND=noninteractive
-ENV OPENJDK_VERSION 1.7.0_75
 
 # UTF-8 locale
 RUN locale-gen en_US en_US.UTF-8
@@ -53,7 +52,8 @@ RUN apt-get update && apt-get install -y \
     automake autoconf
 
 # Git 2.0
-RUN apt-get install -y software-properties-common python-software-properties
+RUN apt-get update && apt-get install -y \
+    software-properties-common python-software-properties
 RUN add-apt-repository ppa:git-core/ppa
 RUN apt-get update && apt-get install -y git git-core
 
@@ -67,9 +67,11 @@ RUN apt-get update && apt-get install -y \
 RUN apt-add-repository ppa:brightbox/ruby-ng
 RUN apt-get update && apt-get install -y \
     ruby2.2 ruby2.2-dev
+RUN gem install nokogiri
+RUN gem install bundler
 
 # Maven
-RUN apt-get install -y gdebi && \
+RUN apt-get update && apt-get install -y gdebi && \
   wget --quiet http://ppa.launchpad.net/natecarlson/maven3/ubuntu/pool/main/m/maven3/maven3_3.2.1-0~ppa1_all.deb && \
   gdebi --non-interactive maven3_3.2.1-0~ppa1_all.deb && \
   ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn && \
