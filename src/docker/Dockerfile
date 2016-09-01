@@ -35,14 +35,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV OPENJDK_VERSION 7u111-2.6.7-0ubuntu0.14.04.3
 ENV MAVEN_VERSION 3.3.9
 
-# UTF-8 locale
-RUN locale-gen en_US en_US.UTF-8
-RUN dpkg-reconfigure locales
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
+RUN apt-get update && apt-get install -y software-properties-common \
+    && apt-add-repository ppa:brightbox/ruby-ng
 
-# Basic Linux tools
 RUN apt-get update && apt-get install -y \
     wget bcrypt curl \
     unzip zip \
@@ -51,19 +46,13 @@ RUN apt-get update && apt-get install -y \
     bsdmainutils \
     libxml2-utils \
     build-essential \
-    automake autoconf
-
-RUN apt-get update && apt-get install -y software-properties-common \
-    python-software-properties \
-    && apt-add-repository ppa:brightbox/ruby-ng ppa:git-core/ppa
-
-RUN apt-get update && apt-get install -y \
-    git git-core \
+    automake autoconf \
+    git \
     s3cmd \
     libmagic-dev=1:5.14-2ubuntu3.3 \
     zlib1g-dev=1:1.2.8.dfsg-1ubuntu1 \
-    ruby2.2=2.2.4-1bbox1~trusty1 \
-    ruby2.2-dev=2.2.4-1bbox1~trusty1 \
+    ruby2.2 \
+    ruby2.2-dev \
     openjdk-7-jdk="${OPENJDK_VERSION}"
 
 RUN gem update && gem install \
