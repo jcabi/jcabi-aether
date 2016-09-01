@@ -53,27 +53,23 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     automake autoconf
 
-# Git 2.0
-RUN apt-get update && apt-get install -y \
-    software-properties-common python-software-properties
-RUN add-apt-repository ppa:git-core/ppa
-RUN apt-get update && apt-get install -y git git-core
+RUN apt-get update && apt-get install -y software-properties-common \
+    python-software-properties \
+    && apt-add-repository ppa:brightbox/ruby-ng ppa:git-core/ppa
 
-# Java
 RUN apt-get update && apt-get install -y \
+    git git-core \
+    s3cmd \
+    libmagic-dev=1:5.14-2ubuntu3.3 \
+    zlib1g-dev=1:1.2.8.dfsg-1ubuntu1 \
+	ruby2.2=2.2.4-1bbox1~trusty1 \
+	ruby2.2-dev=2.2.4-1bbox1~trusty1 \
     openjdk-7-jdk="${OPENJDK_VERSION}"
 
-# Ruby; for puzzle creation
-RUN apt-get update && apt-get install -y \
-    libmagic-dev zlib1g-dev
-RUN apt-add-repository ppa:brightbox/ruby-ng
-RUN apt-get update && apt-get install -y \
-    ruby2.2 ruby2.2-dev
-RUN gem install nokogiri
-RUN gem install bundler
+RUN gem update && gem install \
+    nokogiri:1.6.7.2 \
+	bundler:1.11.2
 
-# S3cmd for AWS S3 integration
-RUN apt-get update && apt-get install -y s3cmd
 
 # Maven
 RUN mkdir -p /usr/share/maven \
