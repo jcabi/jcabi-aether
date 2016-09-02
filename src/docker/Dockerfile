@@ -36,6 +36,7 @@ ENV OPENJDK_VERSION 7u111-2.6.7-0ubuntu0.14.04.3
 ENV MAVEN_VERSION 3.3.9
 
 RUN apt-get update && apt-get install -y software-properties-common \
+    && rm -rf /var/lib/apt/lists/* \
     && apt-add-repository ppa:brightbox/ruby-ng
 
 RUN apt-get update && apt-get install -y \
@@ -53,7 +54,8 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev=1:1.2.8.dfsg-1ubuntu1 \
     ruby2.2 \
     ruby2.2-dev \
-    openjdk-7-jdk="${OPENJDK_VERSION}"
+    openjdk-7-jdk="${OPENJDK_VERSION}" \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN gem update && gem install \
     nokogiri:1.6.7.2 \
