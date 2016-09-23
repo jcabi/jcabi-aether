@@ -32,15 +32,13 @@ LABEL Description="This is the image for aether.jcabi.com" Vendor="jcabi.com" Ve
 WORKDIR /tmp
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV OPENJDK_VERSION 7u111-2.6.7-0ubuntu0.14.04.3
+ENV MAVEN_VERSION 3.3.9
 
-# UTF-8 locale
-RUN locale-gen en_US en_US.UTF-8
-RUN dpkg-reconfigure locales
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
+RUN apt-get update && apt-get install -y software-properties-common \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-add-repository ppa:brightbox/ruby-ng
 
-# Basic Linux tools
 RUN apt-get update && apt-get install -y \
     wget bcrypt curl \
     unzip zip \
@@ -49,45 +47,27 @@ RUN apt-get update && apt-get install -y \
     bsdmainutils \
     libxml2-utils \
     build-essential \
-    automake autoconf
+    automake autoconf \
+    git \
+    s3cmd \
+    libmagic-dev=1:5.14-2ubuntu3.3 \
+    zlib1g-dev=1:1.2.8.dfsg-1ubuntu1 \
+    ruby2.2 \
+    ruby2.2-dev \
+    openjdk-7-jdk="${OPENJDK_VERSION}" \
+    && rm -rf /var/lib/apt/lists/*
 
-# Git 2.0
-RUN apt-get install -y software-properties-common python-software-properties
-RUN add-apt-repository ppa:git-core/ppa
-RUN apt-get update && apt-get install -y git git-core
+RUN gem update && gem install \
+    nokogiri:1.6.7.2 \
+    bundler:1.11.2
 
-# SSH Daemon
-RUN apt-get install -y ssh && \
-  mkdir /var/run/sshd && \
-  chmod 0755 /var/run/sshd
+# Maven
+RUN mkdir -p /usr/share/maven \
+    && curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
+    | tar -xzC /usr/share/maven --strip-components=1 \
+    && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
-# Ruby
-RUN apt-get install -y libmagic-dev zlib1g-dev
-RUN apt-add-repository ppa:brightbox/ruby-ng
-RUN apt-get update
-RUN apt-get install -y ruby2.2 ruby2.2-dev
-RUN gem update
-RUN gem install nokogiri
-RUN gem install bundler
-
-# Java
-RUN apt-get install -y default-jdk
-RUN apt-get install -y gdebi && \
-  wget --quiet http://ppa.launchpad.net/natecarlson/maven3/ubuntu/pool/main/m/maven3/maven3_3.2.1-0~ppa1_all.deb && \
-  gdebi --non-interactive maven3_3.2.1-0~ppa1_all.deb && \
-  ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn && \
-  rm -rf maven3_3.2.1-0~ppa1_all.deb
-
-# PhantomJS
-RUN apt-get install -y phantomjs
-
-# S3cmd for AWS S3 integration
-RUN apt-get install -y s3cmd
-
-# NodeJS
-RUN apt-get install -y nodejs npm
-RUN sudo npm install -g npm
-RUN ln -s /usr/bin/nodejs /usr/bin/node
+ENV MAVEN_HOME /usr/share/maven
 
 # Clean up
 RUN rm -rf /tmp/*
