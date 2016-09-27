@@ -1,6 +1,6 @@
 ## Puzzles
 
-There are 3 active puzzles (18 total):
+There are 2 active puzzles (18 total):
 
 
 <del>unknown</del> [`?`](../master/?)<br/>
@@ -20,4 +20,4 @@ There are 3 active puzzles (18 total):
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<del>69-fd6545e6</del> [`Aether.java:97-97`](../master/src/main/java/com/jcabi/aether/Aether.java#L97-L97)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#79](https://github.com/jcabi/jcabi-aether/issues/79):[**69-46002db1**](https://github.com/jcabi/jcabi-aether/issues/79) [`Aether.java:98-98`](../master/src/main/java/com/jcabi/aether/Aether.java#L98-L98)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;[<del>82</del>](https://github.com/jcabi/jcabi-aether/issues/82) [`?`](../master/?)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#84](https://github.com/jcabi/jcabi-aether/issues/84):[**82-ba434d45**](https://github.com/jcabi/jcabi-aether/issues/84) [`Aether.java:97-100`](../master/src/main/java/com/jcabi/aether/Aether.java#L97-L100)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#84](https://github.com/jcabi/jcabi-aether/issues/84):[<del>82-ba434d45</del>](https://github.com/jcabi/jcabi-aether/issues/84) [`Aether.java:97-100`](../master/src/main/java/com/jcabi/aether/Aether.java#L97-L100)<br/>
