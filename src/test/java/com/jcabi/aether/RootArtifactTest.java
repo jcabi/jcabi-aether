@@ -37,6 +37,7 @@ import org.apache.maven.model.Exclusion;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -49,6 +50,10 @@ import org.sonatype.aether.util.artifact.DefaultArtifact;
  * Test case for {@link RootArtifact}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @todo #70:30min Implement RootArtifact#parent method. It should resolves
+ *  parent of this root artifact. Do not hesitate change method signature if
+ *  any additional parameter will be required. Afterwards remove @Ignore marker
+ *  from RootArtifactTest#resolvesParent test.
  */
 public final class RootArtifactTest {
 
@@ -82,6 +87,32 @@ public final class RootArtifactTest {
                 Matchers.hasToString("junit:junit:jar:4.10"),
                 Matchers.hasToString("org.hamcrest:hamcrest-core:jar:1.1")
             )
+        );
+    }
+
+    /**
+     * RootArtifact can resolve a parent artifact.
+     * @throws Exception If there is some problem inside
+     */
+    @Ignore
+    @Test
+    public void resolvesParent() throws Exception {
+        final RootArtifact root = new RootArtifact(
+            this.aether(),
+            new DefaultArtifact(
+                "com.jcabi", "jcabi-aether", "", "jar", "0.10.1"
+            ),
+            new ArrayList<Exclusion>(0)
+        );
+        MatcherAssert.assertThat(
+            root,
+            Matchers.hasToString(
+                Matchers.containsString("com.jcabi:jcabi-aether:jar:0.10.1")
+            )
+        );
+        MatcherAssert.assertThat(
+            root.parent(),
+            Matchers.hasToString("com.jcabi:jcabi:jar:1.17")
         );
     }
 

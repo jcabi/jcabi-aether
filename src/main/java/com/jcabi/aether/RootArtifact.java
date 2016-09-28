@@ -34,6 +34,7 @@ import com.jcabi.log.Logger;
 import java.util.Collection;
 import java.util.List;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.maven.model.Exclusion;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.graph.DependencyFilter;
@@ -113,6 +114,17 @@ final class RootArtifact {
      */
     public Artifact artifact() {
         return this.art;
+    }
+
+    /**
+     * Get parent artifact of this root artifact.
+     * @return Parent artifact
+     * @throws Exception if fails
+     */
+    public Artifact parent() throws Exception {
+        throw new NotImplementedException(
+            "parent resolving not implemented yet"
+        );
     }
 
     /**
