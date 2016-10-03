@@ -97,17 +97,25 @@ public final class RootArtifactTest {
     @Ignore
     @Test
     public void resolvesParent() throws Exception {
+        final String group = "com.jcabi";
+        final String artifact = "jcabi-aether";
+        final String extension = "jar";
+        final String version = "0.10.1";
         final RootArtifact root = new RootArtifact(
             this.aether(),
             new DefaultArtifact(
-                "com.jcabi", "jcabi-aether", "", "jar", "0.10.1"
+                group, artifact, "", extension, version
             ),
             new ArrayList<Exclusion>(0)
         );
         MatcherAssert.assertThat(
             root,
             Matchers.hasToString(
-                Matchers.containsString("com.jcabi:jcabi-aether:jar:0.10.1")
+                Matchers.is(
+                    String.format(
+                        "%s:%s:%s:%s", group, artifact, extension, version
+                    )
+                )
             )
         );
         MatcherAssert.assertThat(

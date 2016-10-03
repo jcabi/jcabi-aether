@@ -117,7 +117,9 @@ final class RootArtifact {
     }
 
     /**
-     * Get parent artifact of this root artifact.
+     * Get parent artifact of this root artifact. In this example the parent
+     * of com.jcabi:jcabi-aether:jar version 0.10.1 is correctly resolved to
+     * org.jcabi:jcabi:jar version 1.17.
      * @return Parent artifact
      * @throws Exception if fails
      */
