@@ -21,5 +21,5 @@ There are 3 active puzzles (20 total):
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#79](https://github.com/jcabi/jcabi-aether/issues/79):[**69-46002db1**](https://github.com/jcabi/jcabi-aether/issues/79) [`Aether.java:98-98`](../master/src/main/java/com/jcabi/aether/Aether.java#L98-L98)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;[<del>82</del>](https://github.com/jcabi/jcabi-aether/issues/82) [`?`](../master/?)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<del>82-ba434d45</del> [`Aether.java:97-100`](../master/src/main/java/com/jcabi/aether/Aether.java#L97-L100)<br/>
-[#70](https://github.com/jcabi/jcabi-aether/issues/70):[<del>70</del>](https://github.com/jcabi/jcabi-aether/issues/70) [`?`](../master/?)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;[**70-7b24e628**]() [`RootArtifactTest.java:53-56`](../master/src/test/java/com/jcabi/aether/RootArtifactTest.java#L53-L56)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[#70](https://github.com/jcabi/jcabi-aether/issues/70):[<del>70</del>](https://github.com/jcabi/jcabi-aether/issues/70) [`?`](../master/?)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#95](https://github.com/jcabi/jcabi-aether/issues/95):[**70-7b24e628**](https://github.com/jcabi/jcabi-aether/issues/95) [`RootArtifactTest.java:53-56`](../master/src/test/java/com/jcabi/aether/RootArtifactTest.java#L53-L56)<br/>
