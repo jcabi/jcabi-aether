@@ -67,4 +67,3 @@ Please run Maven build before submitting a pull request:
 ```
 $ mvn clean install -Pqulice
 ```
-
