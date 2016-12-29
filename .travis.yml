@@ -11,5 +11,8 @@ env:
   global:
     - MAVEN_OPTS="-XX:MaxPermSize=2g -Xmx4g"
     - JAVA_OPTS="-XX:MaxPermSize=2g -Xmx4g"
+before_install:
+  - rvm install 2.2.2
+  - rvm use 2.2.2
 script: |
   mvn clean install -Pqulice
