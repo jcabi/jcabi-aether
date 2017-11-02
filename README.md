@@ -9,6 +9,8 @@
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.jcabi/jcabi-aether/badge.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-aether)
 [![Dependencies](https://www.versioneye.com/user/projects/561ac2e2a193340f32001011/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561ac2e2a193340f32001011)
 
+[![jpeek report](http://i.jpeek.org/com.jcabi/jcabi-aether/badge.svg)](http://i.jpeek.org/com.jcabi/jcabi-aether/)
+
 Aether adapter for Maven plugins
 
 More details are here: [aether.jcabi.com](http://aether.jcabi.com/index.html)
