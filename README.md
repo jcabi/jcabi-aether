@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/jcabi/jcabi-aether.svg?branch=master)](https://travis-ci.org/jcabi/jcabi-aether)
 [![PDD status](http://www.0pdd.com/svg?name=jcabi/jcabi-aether)](http://www.0pdd.com/p?name=jcabi/jcabi-aether)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-aether/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-aether)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.jcabi/jcabi-aether/badge.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-aether)
+[![Javadoc](https://javadoc.io/badge/com.jcabi/jcabi-aether.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-aether)
 [![Dependencies](https://www.versioneye.com/user/projects/561ac2e2a193340f32001011/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561ac2e2a193340f32001011)
 
 [![jpeek report](http://i.jpeek.org/com.jcabi/jcabi-aether/badge.svg)](http://i.jpeek.org/com.jcabi/jcabi-aether/)
