@@ -282,7 +282,7 @@ public final class ClasspathTest {
             new RemoteRepository(
                 "maven-central",
                 "default",
-                "http://repo1.maven.org/maven2/"
+                "https://repo1.maven.org/maven2/"
             )
         );
         Mockito.doReturn(repos).when(project).getRemoteProjectRepositories();
