@@ -6,6 +6,9 @@ assets:
   pubring.gpg: yegor256/home#assets/pubring.gpg
 install: |
   pdd --file=/dev/null
+  apt-get instal-y openjdk-8-jdk
+  update-java-alternatives --set java-1.8.0-openjdk-amd64
+  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 merge:
   script: |
     mvn clean install -Pqulice --errors --batch-mode
