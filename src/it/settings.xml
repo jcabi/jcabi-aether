@@ -63,8 +63,8 @@
     </profiles>
     <mirrors>
         <mirror>
-            <id>uk.maven.org</id>
-            <url>http://uk.maven.org/maven2</url>
+            <id>googleapis</id>
+            <url>https://maven-central.storage.googleapis.com/maven2</url>
             <mirrorOf>central</mirrorOf>
         </mirror>
     </mirrors>
