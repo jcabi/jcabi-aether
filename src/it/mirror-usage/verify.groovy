@@ -31,4 +31,4 @@
 def log = new File(basedir, 'build.log')
 assert log.exists()
 def text = log.getText('UTF-8')
-assert text.contains('#transferSucceeded(\'GET SUCCEEDED http://uk.maven.org')
+assert text.contains('#transferSucceeded(\'GET SUCCEEDED https://maven-central.storage.googl')
