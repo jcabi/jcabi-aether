@@ -26,7 +26,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 # OF THE POSSIBILITY OF SUCH DAMAGE.
 
-FROM ubuntu:14.04.5
+FROM ubuntu:26.04
 MAINTAINER Yegor Bugayenko <yegor256@gmail.com>
 LABEL Description="This is the image for aether.jcabi.com" Vendor="jcabi.com" Version="1.0"
 WORKDIR /tmp
