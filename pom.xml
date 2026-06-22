@@ -63,7 +63,7 @@
     </distributionManagement>
     <properties>
         <maven.version>3.0.5</maven.version>
-        <sisu.version>2.3.4</sisu.version>
+        <sisu.version>2.6.0</sisu.version>
         <aether.version>1.13.1</aether.version>
     </properties>
     <dependencies>
