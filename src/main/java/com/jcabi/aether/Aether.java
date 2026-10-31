@@ -254,6 +254,11 @@ public final class Aether {
         try {
             Collection<ArtifactResult> results;
             synchronized (this.lrepo) {
+                dreq.setRoot(
+                    system.collectDependencies(
+                        session, dreq.getCollectRequest()
+                    ).getRoot()
+                );
                 results = system.resolveDependencies(session, dreq)
                     .getArtifactResults();
             }
