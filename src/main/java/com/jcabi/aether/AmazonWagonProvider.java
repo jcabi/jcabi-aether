@@ -34,11 +34,14 @@ import com.jcabi.aspects.Loggable;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.maven.wagon.Wagon;
+import org.apache.maven.wagon.providers.http.LightweightHttpWagon;
+import org.apache.maven.wagon.providers.http.LightweightHttpWagonAuthenticator;
+import org.apache.maven.wagon.providers.http.LightweightHttpsWagon;
 import org.kuali.maven.wagon.S3Wagon;
 import org.sonatype.aether.connector.wagon.WagonProvider;
 
 /**
- * Builder of {@link RepositorySystem} class.
+ * Provider of wagons for S3, HTTP, and HTTPS repositories.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -58,6 +61,10 @@ public final class AmazonWagonProvider implements WagonProvider {
         Wagon wagon = null;
         if ("s3".equals(hint)) {
             wagon = new S3Wagon();
+        } else if ("http".equals(hint)) {
+            wagon = AmazonWagonProvider.http(new LightweightHttpWagon());
+        } else if ("https".equals(hint)) {
+            wagon = AmazonWagonProvider.http(new LightweightHttpsWagon());
         }
         return wagon;
     }
@@ -69,6 +76,16 @@ public final class AmazonWagonProvider implements WagonProvider {
     @Loggable(Loggable.DEBUG)
     public void release(final Wagon wagon) {
         // nothing to do
+    }
+
+    /**
+     * Equip HTTP wagon with an authenticator.
+     * @param wagon The wagon
+     * @return The same wagon, ready to connect
+     */
+    private static Wagon http(final LightweightHttpWagon wagon) {
+        wagon.setAuthenticator(new LightweightHttpWagonAuthenticator());
+        return wagon;
     }
 
 }

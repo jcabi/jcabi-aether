@@ -66,7 +66,7 @@ public final class AetherTest {
             new RemoteRepository(
                 "maven-central",
                 "default",
-                "http://repo1.maven.org/maven2/"
+                "https://repo.maven.apache.org/maven2/"
             )
         );
         final File local = this.temp.newFolder();
