@@ -245,6 +245,10 @@
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-invoker-plugin</artifactId>
+                    <version>3.10.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
