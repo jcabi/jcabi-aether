@@ -96,7 +96,7 @@ public final class AetherTest {
         final Collection<DefaultArtifact> artifacts =
             new LinkedList<DefaultArtifact>(
                 Arrays.asList(
-                    new DefaultArtifact("com.jcabi:jcabi-log:pom:1.0-SNAPSHOT"),
+                    new DefaultArtifact("com.jcabi:jcabi-log:pom:0.24.3"),
                     new DefaultArtifact("log4j:log4j:jar:1.2.16")
                 )
             );
@@ -198,7 +198,7 @@ public final class AetherTest {
                 Logger.format("%[exception]s", ex),
                 Matchers.allOf(
                     Matchers.containsString("oss.sonatype.org"),
-                    Matchers.containsString("repo1.maven.org"),
+                    Matchers.containsString("repo.maven.apache.org"),
                     Matchers.containsString("without authentication")
                 )
             );
@@ -242,12 +242,12 @@ public final class AetherTest {
                 new RemoteRepository(
                     "maven-central",
                     type,
-                    "http://repo1.maven.org/maven2/"
+                    "https://repo.maven.apache.org/maven2/"
                 ),
                 new RemoteRepository(
                     "invalid-http-repository",
                     type,
-                    "http://repo1.maven.org/invalid-maven-repo/"
+                    "https://repo.maven.apache.org/invalid-maven-repo/"
                 ),
                 new RemoteRepository(
                     "invalid-s3-repository",
