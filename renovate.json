@@ -2,5 +2,16 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": [
+        "java-jdk"
+      ],
+      "matchManagers": [
+        "github-actions"
+      ],
+      "enabled": false
+    }
   ]
 }
