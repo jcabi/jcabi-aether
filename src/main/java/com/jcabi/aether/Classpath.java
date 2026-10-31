@@ -335,4 +335,3 @@ public final class Classpath extends AbstractSet<File> {
         throw new IllegalArgumentException("Artifact not found");
     }
 }
-

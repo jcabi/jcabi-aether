@@ -313,4 +313,3 @@ public final class MavenClasspath extends AbstractSet<File> {
         return files;
     }
 }
-

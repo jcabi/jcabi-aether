@@ -339,6 +339,7 @@ public final class Aether {
             system.newLocalRepositoryManager(local)
         );
         session.setTransferListener(new LogTransferListener());
+        session.setMirrorSelector(this.mirror(this.settings()));
         return session;
     }
 
