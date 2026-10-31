@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>absent</artifactId>
+    <version>9.9</version>
+  </parent>
+  <artifactId>broken</artifactId>
+</project>

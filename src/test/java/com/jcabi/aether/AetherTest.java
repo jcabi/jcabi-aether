@@ -79,6 +79,11 @@ public final class AetherTest {
     private static final String AWS_SECRET = System.getProperty("aws.secret");
 
     /**
+     * Repository layout.
+     */
+    private static final String LAYOUT = "default";
+
+    /**
      * Temp dir.
      * @checkstyle VisibilityModifier (3 lines)
      */
@@ -225,13 +230,44 @@ public final class AetherTest {
     }
 
     /**
+     * Aether can report the real cause when collection fails.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void reportsRealCauseWhenCollectionFails() throws Exception {
+        try {
+            new Aether(
+                Arrays.asList(
+                    new RemoteRepository(
+                        "local",
+                        AetherTest.LAYOUT,
+                        this.getClass().getResource("broken").toString()
+                    )
+                ),
+                this.temp.newFolder()
+            ).resolve(
+                new DefaultArtifact("com.example:broken:jar:1.0"),
+                JavaScopes.RUNTIME
+            );
+            Assert.fail("exception expected here");
+        } catch (final DependencyResolutionException ex) {
+            MatcherAssert.assertThat(
+                ex.getCause().getCause(),
+                Matchers.not(
+                    Matchers.instanceOf(NullPointerException.class)
+                )
+            );
+        }
+    }
+
+    /**
      * Make mock maven project.
      * @return The project
      * @throws Exception If there is some problem inside
      */
     private MavenProject project() throws Exception {
         final MavenProject project = Mockito.mock(MavenProject.class);
-        final String type = "default";
+        final String type = AetherTest.LAYOUT;
         final List<RemoteRepository> repos = new LinkedList<RemoteRepository>(
             Arrays.asList(
                 new RemoteRepository(
