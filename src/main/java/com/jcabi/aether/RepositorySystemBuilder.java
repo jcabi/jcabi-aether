@@ -37,7 +37,6 @@ import org.apache.maven.repository.internal.DefaultArtifactDescriptorReader;
 import org.apache.maven.repository.internal.DefaultVersionRangeResolver;
 import org.apache.maven.repository.internal.DefaultVersionResolver;
 import org.sonatype.aether.RepositorySystem;
-import org.sonatype.aether.connector.async.AsyncRepositoryConnectorFactory;
 import org.sonatype.aether.connector.file.FileRepositoryConnectorFactory;
 import org.sonatype.aether.connector.wagon.PlexusWagonConfigurator;
 import org.sonatype.aether.connector.wagon.WagonConfigurator;
@@ -72,10 +71,6 @@ final class RepositorySystemBuilder {
         locator.addService(
             RepositoryConnectorFactory.class,
             FileRepositoryConnectorFactory.class
-        );
-        locator.addService(
-            RepositoryConnectorFactory.class,
-            AsyncRepositoryConnectorFactory.class
         );
         locator.addService(
             WagonProvider.class,
