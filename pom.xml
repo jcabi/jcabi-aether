@@ -63,7 +63,7 @@
     <maven.version>3.0.5</maven.version>
     <sisu.version>2.6.0</sisu.version>
     <aether.version>1.13.1</aether.version>
-    <aspectj.version>1.9.7</aspectj.version>
+    <aspectj.version>1.9.27</aspectj.version>
   </properties>
   <dependencies>
     <dependency>
